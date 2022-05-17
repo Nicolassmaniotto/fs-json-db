@@ -14,7 +14,7 @@ async function createDB(name,basesParam=null){
     let bases  = Bases
     Object.assign(bases,basesParam);
     try{
-        if(!name) throw 'Sem nome para a Tabela '
+        if(!name) throw 'Sem nome para a Tabela'
         if(fs.existsSync(`${bases.dir}/${name}`)) throw 'erro BD ja exist'
         if(!r.readMakeDir(`${bases.dir}/${name}`)) throw 'Erro ao criar'
         return 'Sucesso'
@@ -22,11 +22,6 @@ async function createDB(name,basesParam=null){
         return err|| 'erro desconhecido ao criar DB'
     }
 
-}
-
-async function whriteData(dir,data){
-
-    return await r.readMakeFile(dir,JSON.stringify(data))
 }
 async function addItem(dir,data,basesParam =null){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
@@ -72,13 +67,6 @@ async function addItem(dir,data,basesParam =null){
     }
 
 }
-async function itFilter(item,query){
-    try{
-        return item.filter(el => el.toLowerCase().indexOf(query.toLowerCase()) > -1);
-    }catch(err){
-        return err
-    }
-}
 
 async function findId(dir,regexData,basesParam= null){
     basesParam  =  basesParam||{noParam:0}
@@ -97,6 +85,7 @@ async function findId(dir,regexData,basesParam= null){
        const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
         for(i in file){
             // optado por for ao inves de for each para reusar para pegar mais de um id
+            // id == fileatual*qtId-qtId+(i+1)
             var regex = new RegExp(data.regex,data.opt);
             if(regex.exec(file[i]) && i  >= data.qt){
                 return i
@@ -107,14 +96,45 @@ async function findId(dir,regexData,basesParam= null){
         return err
     }
 }
+async function update(dir,id,data,basesParam =null){
+    basesParam  =  basesParam||{noParam:0}
+    let bases  = Bases
+    Object.assign(bases,basesParam);
+    try{
+        if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD não exist'
+        let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
+        var calc;
+        if(pasta.length==1){
+            var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
+            console.log(file[id])
+        }else{
+            var calc = (bases.qtId+id)/bases.qtId
+            var file = 
+        }
+        return calc
+    }catch(err){
+        return err
+    }
+}
 
 let dataJson = {
     user:"usuario",
     erros:["erro","errei","errou"]
 }
+
+update('teste',1,'carroca').then(console.log).catch(console.log)
 // let basesParam = {
 //     qtId:2
 // }
+    // let argv = require('process')['argv']
+    // console.log(argv)
+    // if(argv[2] == 'create' || argv[1] == 'create'){
+    //     createDB('teste').then(console.log).catch(console.log)
+    // }else if(argv[2] == 'add' || argv[1] == 'add'){
+    //     addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
+    // }else if(argv[2] == 'find' || argv[1] == 'find'){
+    //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
+    // } 
 // addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
 // findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)
