@@ -1,0 +1,20 @@
+{
+  "name": "fs-json-db",
+  "version": "0.0.1",
+  "description": "DB baseado em pasta, e JSON, usando FS principalmente como base.",
+  "main": "main.js",
+  "scripts": {
+    "test": "clear && node main.js",
+    "start": "npm test"
+  },
+  "keywords": [
+    "DB",
+    "JSON",
+    "NODE"
+  ],
+  "author": "“Nicolas <“nicolasantoniosmaniotto@gmail.com”>",
+  "license": "Unlicense",
+  "dependencies": {
+    "readline": "^1.3.0"
+  }
+}
