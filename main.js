@@ -108,10 +108,11 @@ async function update(dir,id,data,basesParam =null){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
             console.log(file[id])
         }else{
-            var calc = (bases.qtId+id)/bases.qtId
-            var file = 
-        }
+            var calc = parseInt((bases.qtId+id)/bases.qtId)
+            // calc = calc -id
+            var file = fs.readFileSync(`${bases.dir}/${dir}/${calc}.jsonl`, 'utf8').split('\n');
         return calc
+        }
     }catch(err){
         return err
     }
