@@ -1,5 +1,4 @@
 const r = require('./reader');
-// const readlinePromises = require('node:readline/promises');
 const readline = require('readline')
 const fs = require('fs')
 
@@ -48,9 +47,9 @@ async function addItem(dir,data,basesParam =null){
             fs.writeFile(`${bases.dir}${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
                 if (err) throw err;
             // console.log('O arquivo foi criado!');
-            return 'success'
+            // return 'success'
             });
-            return 'add item E OU criado novo'
+
         }else if(calc < bases.qtId){
             fs.appendFile(`${bases.dir}${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
                 if(!err){
@@ -61,11 +60,35 @@ async function addItem(dir,data,basesParam =null){
             })
             return 'add item'
         }
-        return 'por algum motivo algo não aconteceu'
+        return 'add item E OU criado novo'
+        // return 'por algum motivo algo não aconteceu'
     }catch(err){
         return err
     }
 
+}
+async function addMultItems(dir,data,basesParam =null){
+    basesParam  =  basesParam||{noParam:0}
+    let bases  = Bases
+    Object.assign(bases,basesParam);
+    try{
+        for(i in data){
+            if(calc >= bases.qtId){
+                fs.writeFile(`${bases.dir}${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
+                    if (err) throw err;
+                // console.log('O arquivo foi criado!');
+                // return 'success'
+                });
+            }
+            let files = fs.readFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`, 'utf8');
+            let calc = files.match(/\n/g).length;
+            if(calc<bases.qtId){
+
+            }
+        }
+    }catch(err){
+        return err
+    }
 }
 
 async function findId(dir,regexData,basesParam= null){
@@ -136,6 +159,9 @@ let dataJson = {
     erros:["erro","errei","errou"]
 }
 
+
+
+module.exports ={createDB,addItem,findId,update}
 /* // testes comente essa linha para testar
 let basesParam = {
     qtId:2
@@ -155,4 +181,3 @@ findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
 createDB('teste').then(console.log).catch(console.log)
 update('teste',13,'carroca').then(console.log).catch(console.log)
 /* */
-module.exports ={createDB,addItem,findId,update}
