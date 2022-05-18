@@ -83,11 +83,12 @@ async function findId(dir,regexData,basesParam= null){
             data.opt = 'i'
         }
        const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
+        var cont = 0;
         for(i in file){
-            // optado por for ao inves de for each para reusar para pegar mais de um id
+            // optado por for ao inves de foreach para reusar para pegar mais de um id
             // id == fileatual*qtId-qtId+(i+1)
             var regex = new RegExp(data.regex,data.opt);
-            if(regex.exec(file[i]) && i  >= data.qt){
+            if(regex.exec(file[i]) && cont++  >= data.qt){
                 return i
             }
         }
