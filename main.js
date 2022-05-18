@@ -107,11 +107,23 @@ async function update(dir,id,data,basesParam =null){
         if(pasta.length==1){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
             console.log(file[id])
+            return 'if 1'
         }else{
             var calc = parseInt((bases.qtId+id)/bases.qtId)
+            var resto = parseFloat((((bases.qtId+id)/bases.qtId)%1).toFixed(1))*10
+            console.log(resto)
             // calc = calc -id
             var file = fs.readFileSync(`${bases.dir}/${dir}/${calc}.jsonl`, 'utf8').split('\n');
-        return calc
+            // como o resto vai de 0 a 9 e o array file começa em 0 se subtrai 1 para achar a linha correta
+            file[resto-1] = data
+            var result = file.join("\n")
+            await fs.writeFile(`${bases.dir}${dir}/${calc}.jsonl`, `${result}\n`, (err) => {
+                if (err) throw err;
+            // console.log('O arquivo foi criado!');
+            return 'success'
+            });
+            return 'atualizado'
+        // calc
         }
     }catch(err){
         return err
@@ -123,7 +135,7 @@ let dataJson = {
     erros:["erro","errei","errou"]
 }
 
-update('teste',1,'carroca').then(console.log).catch(console.log)
+// update('teste',13,'carroca').then(console.log).catch(console.log)
 // let basesParam = {
 //     qtId:2
 // }
