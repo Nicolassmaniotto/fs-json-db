@@ -1,5 +1,4 @@
 const r = require('./reader');
-// const readlinePromises = require('node:readline/promises');
 const readline = require('readline')
 const fs = require('fs')
 
@@ -136,6 +135,9 @@ let dataJson = {
     erros:["erro","errei","errou"]
 }
 
+
+
+module.exports ={createDB,addItem,findId,update}
 /* // testes comente essa linha para testar
 let basesParam = {
     qtId:2
@@ -155,4 +157,3 @@ findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
 createDB('teste').then(console.log).catch(console.log)
 update('teste',13,'carroca').then(console.log).catch(console.log)
 /* */
-module.exports ={createDB,addItem,findId,update}
