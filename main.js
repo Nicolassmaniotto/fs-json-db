@@ -181,12 +181,14 @@ async function update(dir,id,data,basesParam =null){
         if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD não exist'
         let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
         var calc;
-        if(pasta.length==1){
+        if(pasta.length==0){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
             console.log(file[id])
             return 'if 1'
         }else{
             var calc = parseInt((bases.qtId+id)/bases.qtId)
+            if(calc>pasta.length) throw calc
+            console.log(calc)
             var resto = parseFloat((((bases.qtId+id)/bases.qtId)%1).toFixed(1))*10
             console.log(resto)
             // calc = calc -id

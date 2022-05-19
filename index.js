@@ -151,7 +151,7 @@ async function update(dir,id,data,basesParam =null){
         if(pasta.length==1){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
             console.log(file[id])
-            return 'if 1'
+            // return 'if 1'
         }else{
             var calc = parseInt((bases.qtId+id)/bases.qtId)
             var resto = parseFloat((((bases.qtId+id)/bases.qtId)%1).toFixed(1))*10
