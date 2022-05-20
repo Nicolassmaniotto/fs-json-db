@@ -148,13 +148,14 @@ async function findIdInAll(dir,regex,basesParam =null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);
-    let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
-    // console.log(pasta.length)
     try{
+        let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
+    // console.log(pasta.length)
+
         let  id;
         for(var i =1; i<= pasta.length; i++){
             // var file = parseInt(i)+1
-            console.log('item '+i+' de '+pasta.length)
+            // console.log('item '+i+' de '+pasta.length)
         
             await findId(`${dir}/${i}.jsonl` ,regex).then((result)=>{
                 id = result
@@ -173,6 +174,81 @@ async function findIdInAll(dir,regex,basesParam =null){
         return err
     }
 }
+
+async function findItem(dir,regexData,basesParam= null){
+    // pega items pelo regex
+    basesParam  =  basesParam||{noParam:0}
+    let bases  = Bases
+    Object.assign(bases,basesParam);
+    try{
+        var data = {};
+        if(!regexData) throw 'regex não definido'
+        if(!regexData.regex||regexData.regex == null || typeof(regexData.regex)=='undefined'){
+            data.regex = regexData
+            data.qt    = 1
+        }
+        if(!data.opt){
+            data.opt = 'i'
+        }
+       const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
+        var cont = 0;
+        var item ={};
+        item.item =[];
+        item.id = [];
+        for(i in file){
+            var regex = new RegExp(data.regex,data.opt);
+            if(regex.exec(file[i])){
+                item.id[cont]   = parseInt(i)+1
+                // console.log(file[i])
+                item.item[cont++] = file[i]
+            }
+        }
+        if(item.id.length>0){
+            return item
+        }else{
+            // console.log(item.id[i])item
+            return 0
+        }
+
+
+    }catch(err){
+        return err
+    }
+}
+async function findItemInAll(dir,regex,basesParam =null){
+    basesParam  =  basesParam||{noParam:0}
+    let bases  = Bases
+    Object.assign(bases,basesParam);
+    try{
+        let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
+    // console.log(pasta.length)
+
+        let  item=[];
+        var cont =0;
+        for(var i =1; i<= pasta.length; i++){
+            // var file = parseInt(i)+1
+            // console.log('item '+i+' de '+pasta.length)
+
+            await findItem(`${dir}/${i}.jsonl` ,regex).then((result)=>{
+                // console.log(result)
+                if(result!=0){
+                    result.id = `${i}${result.id}`
+                    item[cont++] = result
+                    // console.log(item)
+                }
+            }).catch(console.log)
+            
+            // console.log(item)
+            // console.log(i)
+        }
+        return item
+    }catch(err){
+        console.log('erro')
+        return err
+    }
+}
+
+
 async function update(dir,id,data,basesParam =null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
@@ -209,14 +285,14 @@ async function update(dir,id,data,basesParam =null){
     }
 }
 
-let dataJson = {
-    user:"usuario",
-    erros:["erro","errei","errou"]
-}
+// let dataJson = {
+//     user:"usuario",
+//     erros:["erro","errei","errou"]
+// }
 
 
 
-module.exports ={createDB,addItem,findId,update,addItemSync,findIdInAll}
+module.exports ={createDB,addItem,findId,update,addItemSync,findIdInAll,findItemInAll}
 /* // testes comente essa linha para testar
 let basesParam = {
     qtId:2
