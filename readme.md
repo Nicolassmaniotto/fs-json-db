@@ -1,6 +1,6 @@
 # DB SYSTEM
 
-### Sistema de acesso baseado no funcionamento de NoSQL databases.
+### Sistema de acesso baseado no funcionamento de NoSQL file databases.
 
 
 #### JSON Escolhido por ser mais facil controlar os dados a serem inserido sem nescessariamente saber quais serao esses dados.
@@ -19,6 +19,41 @@
       * {dados:{blobComoString:"001010000001010001010010100"}}
       * Qualquer verificação devera ser feita fora do gerenciador de DB
  
-
-
-
+### Como usar:
+* Pode ser usado duas formas de chamada:
+   1. import  {findItemInAll} from "fs-json-db"
+   2. const DB = require("fs-json-db")
+* Para instalar no seu projeto use:
+   1. yarn add fs-json-db
+   2. npm install --save fs-json-db
+* createDB(dirName,basesParam)
+   * dirName == PASTA principal onde serão salvos;
+   * basesParam, altera ou adiciona, parametros especiais;
+      * ```js
+         let basesParam = {
+            qtId:10, //numero de items por arquivo posso mudar o valor a qualquer momento vantagens do modelo
+            dir:'data/DB/', //diretorio a ser usado como base para todos os DBs, posso alterar esse valor, nesse caso posso ter uma pasta para qualquer conjunto de DBs
+            }
+         ```
+      * Embora eu tenha defino o qtId para 10, usar um valor maior pode ser util em alguns casos, definido 10 para facilitar execuçoes assincronas, uma vez que possa manipular varios arquivos de uma vez, se tornando mais rapida em alguns casos.
+   * ```js
+      createDB(dirName) //chamada simples
+      ```
+* ```js 
+   addItem(DBname,data) //adiciona item de modo asyncrono da erro em alguns casos se for adicionar varios items de um vez use o addItemSync()
+   ``` 
+* ```js
+   addItemSync(DBname,data) //adiciona items de modo syncrono
+   ```
+   * ```js
+      //exemplo
+      data.forEach((element)=>{
+            // adiciona todos os items do array data ao banco de dados user
+         addItemSync('user',JSON.Stringfy(element))
+      })
+* ```js
+   findIdInAll(DBname,"/regex/") //busca id pelo valor do regex
+   ```
+* ```js
+   findItemInAll(DBname,"/regex/") //retorna o id pelo valor do regex
+   ```
