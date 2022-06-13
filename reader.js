@@ -1,6 +1,7 @@
-const fs = require('fs');
-const readline = require('readline')
-
+// const fs = require('fs');
+// const readline = require('readline')
+import * as fs from 'fs'
+import * as readline  from 'readline'
 // abstração do fs
 async function readMake(dir,data){
     readStatus(dir)
@@ -104,5 +105,6 @@ async function readLineFile(dir,func){
 }
 
 
-module.exports = {readMakeDir,updateStatus,readStatus,readMakeFile,readLineFile};
+// module.exports = {readMakeDir,updateStatus,readStatus,readMakeFile,readLineFile};
+export{readMakeDir,updateStatus,readStatus,readMakeFile,readLineFile};
 // module.exports = {}

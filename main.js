@@ -1,10 +1,15 @@
-const r = require('./reader');
-const readline = require('readline')
-const fs = require('fs')
+// const r = require('./reader');
+// const readline = require('readline')
+// const fs = require('fs')
+
+import * as r from './reader.js';
+import * as readline from 'readline';
+import * as fs from 'fs';
+import {findIdInAll,findItemInAll} from './find/index.js';
 
 const Bases = {
     qtId:10,
-    dir:'data/DB/',
+    dir:'data/DB/'
 
 }
 async function createDB(name,basesParam=null){
@@ -111,152 +116,6 @@ function addItemSync(dir,data,basesParam =null){
 
 }
 
-async function findId(dir,regexData,basesParam= null){
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-        var data = {};
-        if(!regexData) throw 'regex não definido'
-        if(!regexData.regex||regexData.regex == null || typeof(regexData.regex)=='undefined'){
-            data.regex = regexData
-            data.qt    = 1
-        }
-        if(!data.opt){
-            data.opt = 'i'
-        }
-       const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
-        var cont = 0;
-        for(i in file){
-            // optado por for ao inves de foreach para reusar para pegar mais de um id
-            // id == fileatual*qtId-qtId+(i+1)
-            var regex = new RegExp(data.regex,data.opt);
-            // console.log(i)//&& 
-            // console.log(file[i])
-            // if(regex.exec(file[i]) != null && cont++  >= data.qt){
-            if(regex.exec(file[i])){
-                // console.log(i)//&& 
-                return parseInt(i)+1
-            }
-        }
-        return 0
-    }catch(err){
-        return err
-    }
-}
-async function findIdInAll(dir,regex,basesParam =null){
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-        let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
-    // console.log(pasta.length)
-
-        let  id;
-        for(var i =1; i<= pasta.length; i++){
-            // var file = parseInt(i)+1
-            // console.log('item '+i+' de '+pasta.length)
-        
-            await findId(`${dir}/${i}.jsonl` ,regex).then((result)=>{
-                id = result
-            }).catch(console.log)
-            //    console.log(id)
-            if(id > 0){
-                return i*bases.qtId-bases.qtId+id
-            }else{
-                    // console.log('else')
-            }
-            // console.log(i)
-        }
-        return id
-    }catch(err){
-        console.log('erro')
-        return err
-    }
-}
-
-async function findItem(dir,regexData,basesParam= null){
-    // pega items pelo regex
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-        var data = {};
-        if(!regexData) throw 'regex não definido'
-        if(!regexData.regex||regexData.regex == null || typeof(regexData.regex)=='undefined'){
-            data.regex = regexData
-            data.qt    = 1
-        }
-        if(!data.opt){
-            data.opt = 'i'
-        }
-       const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
-        var cont = 0;
-        var item ={};
-        item.item =[];
-        item.id = [];
-        for(i in file){
-            var regex = new RegExp(data.regex,data.opt);
-            if(regex.exec(file[i])){
-                item.id[cont]   = parseInt(i)+1
-                // console.log(file[i])
-                item.item[cont++] = file[i]
-            }
-        }
-        if(item.id.length>0){
-            return item
-        }else{
-            // console.log(item.id[i])item
-            return 0
-        }
-
-
-    }catch(err){
-        return err
-    }
-}
-async function findItemInAll(dir,regex,basesParam =null){
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-
-        let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
-    // console.log(pasta.length)
-        if(bases.id){
-            var calc = (parseInt(regex)+parseInt(bases.qtId))/bases.qtId;
-            console.log(calc)
-            var file = fs.readFileSync(`${bases.dir}/${dir}/${parseInt(calc)}.jsonl`, 'utf8').split('\n');
-            calc = calc%1;
-            calc = (calc.toFixed(1))*10
-            // console.log(calc)
-            return file[calc]
-            // throw calc
-        }
-        let  item=[];
-        var cont =0;
-        for(var i =1; i<= pasta.length; i++){
-            // var file = parseInt(i)+1
-            // console.log('item '+i+' de '+pasta.length)
-
-            await findItem(`${dir}/${i}.jsonl` ,regex).then((result)=>{
-                // console.log(result)
-                if(result!=0){
-                    result.id = i*bases.qtId-bases.qtId+result.id
-                    item[cont++] = result
-                    // console.log(item)
-                }
-            }).catch(console.log)
-            
-            // console.log(item)
-            // console.log(i)
-        }
-        return item
-    }catch(err){
-        console.log('erro')
-        return err
-    }
-}
 
 
 async function update(dir,id,data,basesParam =null){
@@ -295,30 +154,40 @@ async function update(dir,id,data,basesParam =null){
     }
 }
 
-// let dataJson = {
-//     user:"usuario",
-//     erros:["erro","errei","errou"]
-// }
 
 
 
-module.exports ={createDB,addItem,findId,update,addItemSync,findIdInAll,findItemInAll}
-/* // testes comente essa linha para testar
+// module.exports ={createDB,addItem,findId,update,addItemSync,findIdInAll,findItemInAll}
+// /* // testes comente essa linha para testar
+
+
 let basesParam = {
     qtId:2
 }
-    let argv = require('process')['argv']
-    console.log(argv)
-    if(argv[2] == 'create' || argv[1] == 'create'){
-        createDB('teste').then(console.log).catch(console.log)
-    }else if(argv[2] == 'add' || argv[1] == 'add'){
-        addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
-    }else if(argv[2] == 'find' || argv[1] == 'find'){
-        findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
-    } 
+    // let argv = require('process')['argv']
 
-addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
-findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
-createDB('teste').then(console.log).catch(console.log)
-update('teste',13,'carroca').then(console.log).catch(console.log)
+    // console.log(argv)
+    // if(argv[2] == 'create' || argv[1] == 'create'){
+    //     createDB('teste').then(console.log).catch(console.log)
+    // }else if(argv[2] == 'add' || argv[1] == 'add'){
+    //     addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
+    // }else if(argv[2] == 'find' || argv[1] == 'find'){
+    //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
+    // } 
+// for(let i =0;i<=100;i++){
+//     let dataJson = {
+//         user:i,
+//         erros:["erro","contem","errou"]
+//     }
+//     addItemSync('teste',JSON.stringify(dataJson))
+// }
+
+findItemInAll('teste','37').then(console.log).catch(console.log)
+// createDB('teste').then(console.log).catch(console.log)l
+let jsonVar = {
+    user:"usuario",
+    nome:"unamed",
+    algo:['algo','2','5']
+}
+update('teste',1,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
 /* */

@@ -162,7 +162,7 @@ async function findIdInAll(dir,regex,basesParam =null){
             }).catch(console.log)
             //    console.log(id)
             if(id > 0){
-                return `${i}${id}`
+                return i*bases.qtId-bases.qtId+id
             }else{
                     // console.log('else')
             }
@@ -220,9 +220,19 @@ async function findItemInAll(dir,regex,basesParam =null){
     let bases  = Bases
     Object.assign(bases,basesParam);
     try{
+
         let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
     // console.log(pasta.length)
-
+        if(bases.id){
+            var calc = (parseInt(regex)+parseInt(bases.qtId))/bases.qtId;
+            console.log(calc)
+            var file = fs.readFileSync(`${bases.dir}/${dir}/${parseInt(calc)}.jsonl`, 'utf8').split('\n');
+            calc = calc%1;
+            calc = (calc.toFixed(1))*10
+            // console.log(calc)
+            return file[calc]
+            // throw calc
+        }
         let  item=[];
         var cont =0;
         for(var i =1; i<= pasta.length; i++){
@@ -232,7 +242,7 @@ async function findItemInAll(dir,regex,basesParam =null){
             await findItem(`${dir}/${i}.jsonl` ,regex).then((result)=>{
                 // console.log(result)
                 if(result!=0){
-                    result.id = `${i}${result.id}`
+                    result.id = i*bases.qtId-bases.qtId+result.id
                     item[cont++] = result
                     // console.log(item)
                 }
