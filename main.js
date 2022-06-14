@@ -183,7 +183,7 @@ for(let i =0;i<=100;i++){
     // addItemSync('teste',JSON.stringify(dataJson)) 
 }
 
-findIdInAll('teste','user',2).then(console.log).catch(console.log)
+await findIdInAll('teste','user',1).then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",

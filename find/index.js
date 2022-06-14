@@ -17,15 +17,23 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
         if(typeFind == 'regex' || typeFind =='1' || typeFind == null){
             for(var i =1; i<= pasta.length; i++){
                 await findId(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
-                    id = result
+                    if(result!=0){
+                        // result.id = i*bases.qtId-bases.qtId+result.id
+                        for(let j in result){
+                            result[j] = i*bases.qtId-bases.qtId+result[j]
+                        }
+                        arrayReturn[cont++] = result
+                        // console.log(result) 
+                        // console.log(item)
+                    }
                 }).catch(console.log)
-                if(id > 0){
-                    arrayReturn[cont]= i*bases.qtId-bases.qtId+id
-                    cont++;
-                    id = null
-                }else{
-                        // console.log('else')
-                }
+                // if(id > 0){
+                //     arrayReturn[cont]= i*bases.qtId-bases.qtId+id
+                //     cont++;
+                //     id = null
+                // }else{
+                //         // console.log('else')
+                // }
             }
         }else if(typeFind == 'key'|| typeFind == '2'){
             for(var i =1; i<= pasta.length; i++){
