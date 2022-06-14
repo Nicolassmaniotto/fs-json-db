@@ -2,6 +2,7 @@
 
 ### Sistema de acesso baseado no funcionamento de NoSQL file databases.
 
+## THIS IS ALPHA
 
 #### JSON Escolhido por ser mais facil controlar os dados a serem inserido sem nescessariamente saber quais serao esses dados.
 

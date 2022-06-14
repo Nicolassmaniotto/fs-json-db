@@ -1,7 +1,7 @@
 import {Bases} from '../bases.js'
 
 import {findId,findItem} from './findByRegex.js'
-import { findIdByKey } from './findBykey.js'
+import { findIdByKey,findItemByKey } from './findBykey.js'
 import * as fs from 'fs'
 async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
     basesParam  =  basesParam||{noParam:0}
@@ -99,14 +99,14 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         }else if(typeFind == 'key'|| typeFind == '2'){
             console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
-                await findIdByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                await findItemByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
                     // console.log(result)
                     if(result!=0){
                         // result.id = i*bases.qtId-bases.qtId+result.id
                         for(let j in result){
-                            result[j] = i*bases.qtId-bases.qtId+result[j]
+                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
                         }
-                        item[cont++] = result
+                        item = item.concat(result)
                         // console.log(result) 
                         // console.log(item)
                     }
@@ -132,7 +132,7 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         //             // console.log(item)
         //         }
         //     }).catch(console.log)
-            
+        findIdByKey
         //     // console.log(item)
         //     // console.log(i)
         // }
