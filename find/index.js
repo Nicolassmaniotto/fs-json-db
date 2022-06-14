@@ -1,8 +1,9 @@
 import {Bases} from '../bases.js'
 
 import {findId,findItem} from './findByRegex.js'
+import { findIdByKey } from './findBykey.js'
 import * as fs from 'fs'
-async function findIdInAll(dir,findVar,basesParam =null){
+async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);
@@ -13,22 +14,32 @@ async function findIdInAll(dir,findVar,basesParam =null){
         let  id;
         let  arrayReturn=[];
         var cont=0;
-        for(var i =1; i<= pasta.length; i++){
-            // var file = parseInt(i)+1
-            // console.log('item '+i+' de '+pasta.length)
-        
-            await findId(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
-                id = result
-            }).catch(console.log)
-            //    console.log(id)
-            if(id > 0){
-                arrayReturn[cont]= i*bases.qtId-bases.qtId+id
-                cont++;
-                id = null
-            }else{
-                    // console.log('else')
+        if(typeFind == 'regex' || typeFind =='1' || typeFind == null){
+            for(var i =1; i<= pasta.length; i++){
+                await findId(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                    id = result
+                }).catch(console.log)
+                if(id > 0){
+                    arrayReturn[cont]= i*bases.qtId-bases.qtId+id
+                    cont++;
+                    id = null
+                }else{
+                        // console.log('else')
+                }
             }
-            // console.log(i)
+        }else if(typeFind == 'key'|| typeFind == '2'){
+            await findIdByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                // console.log(result)
+                if(result!=0){
+                    // result.id = i*bases.qtId-bases.qtId+result.id
+                    for(let j in result){
+                        result[j] = i*bases.qtId-bases.qtId+result[j]
+                    }
+                    item[cont++] = result
+                    // console.log(result) 
+                    // console.log(item)
+                }
+            }).catch(console.log)
         }
         return arrayReturn
     }catch(err){
@@ -37,7 +48,7 @@ async function findIdInAll(dir,findVar,basesParam =null){
     }
 }
 
-async function findItemInAll(dir,findVar,basesParam =null){
+async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);
@@ -57,22 +68,57 @@ async function findItemInAll(dir,findVar,basesParam =null){
         }
         let  item=[];
         var cont =0;
-        for(var i =1; i<= pasta.length; i++){
-            // var file = parseInt(i)+1
-            // console.log('item '+i+' de '+pasta.length)
-
-            await findItem(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
-                // console.log(result)
-                if(result!=0){
-                    result.id = i*bases.qtId-bases.qtId+result.id
-                    item[cont++] = result
-                    // console.log(item)
-                }
-            }).catch(console.log)
-            
-            // console.log(item)
-            // console.log(i)
+        if(typeFind == 'regex' || typeFind =='1' || typeFind == null){
+            for(var i =1; i<= pasta.length; i++){
+                await findItem(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                    // console.log(result)
+                    if(result!=0){
+                        result.id = i*bases.qtId-bases.qtId+result.id
+                        item[cont++] = result
+                        // console.log(item)
+                    }
+                }).catch(console.log)
+            }
+        }else if(typeFind == 'key'|| typeFind == '2'){
+            console.log('passou aqui')
+            for(var i =1; i<= pasta.length; i++){
+                await findIdByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                    // console.log(result)
+                    if(result!=0){
+                        // result.id = i*bases.qtId-bases.qtId+result.id
+                        for(let j in result){
+                            result[j] = i*bases.qtId-bases.qtId+result[j]
+                        }
+                        item[cont++] = result
+                        // console.log(result) 
+                        // console.log(item)
+                    }
+                }).catch(console.log)
+                // if(id > 0){
+                //     arrayReturn[cont]= i*bases.qtId-bases.qtId+id
+                //     cont++;
+                //     id = null
+                // }else{
+                //         // console.log('else')
+                // }
+            }
         }
+        // for(var i =1; i<= pasta.length; i++){
+        //     // var file = parseInt(i)+1
+        //     // console.log('item '+i+' de '+pasta.length)
+
+        //     await findItem(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+        //         // console.log(result)
+        //         if(result!=0){
+        //             result.id = i*bases.qtId-bases.qtId+result.id
+        //             item[cont++] = result
+        //             // console.log(item)
+        //         }
+        //     }).catch(console.log)
+            
+        //     // console.log(item)
+        //     // console.log(i)
+        // }
         return item
     }catch(err){
         console.log('erro')

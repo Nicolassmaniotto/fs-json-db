@@ -91,7 +91,7 @@ async function findItem(dir,regexData,basesParam= null){
         if(!data.opt){
             data.opt = 'i'
         }
-       const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
+        const file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
         var cont = 0;
         var item ={};
         item.item =[];

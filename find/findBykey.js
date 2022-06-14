@@ -20,8 +20,6 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
         var result = []
         var cont = 0;
         for(var i =0;i<bases.qtId;i++){
-            console.log(i)
-            console.log(file[i])
             let jsonParsed = tryJson(file[i])
             if(!jsonParsed) continue
             if(keyName in jsonParsed){
@@ -36,6 +34,9 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
     }
 }
 
+export {findIdByKey}
+
+/*
 
 const BasesParam = {
     dir:'../data/DB'
@@ -48,3 +49,4 @@ findIdByKey(`/teste/${1}.jsonl`,'user',null,BasesParam).then(console.log)
 
     
 // }
+// */ 

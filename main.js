@@ -174,20 +174,21 @@ let basesParam = {
     // }else if(argv[2] == 'find' || argv[1] == 'find'){
     //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
     // } 
-// for(let i =0;i<=100;i++){
-//     let dataJson = {
-//         user:i,
-//         erros:["erro","contem","errou"]
-//     }
-//     addItemSync('teste',JSON.stringify(dataJson))
-// }
+   await  createDB('teste')
+for(let i =0;i<=100;i++){
+    let dataJson = {
+        user:i,
+        erros:["erro","contem","errou"]
+    }
+    // addItemSync('teste',JSON.stringify(dataJson)) 
+}
 
-findItemInAll('teste','37').then(console.log).catch(console.log)
+findItemInAll('teste','user',2).then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",
     nome:"unamed",
     algo:['algo','2','5']
 }
-update('teste',1,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
+update('teste',5,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
 /* */
