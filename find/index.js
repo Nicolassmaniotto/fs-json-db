@@ -28,18 +28,27 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
                 }
             }
         }else if(typeFind == 'key'|| typeFind == '2'){
-            await findIdByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
-                // console.log(result)
-                if(result!=0){
-                    // result.id = i*bases.qtId-bases.qtId+result.id
-                    for(let j in result){
-                        result[j] = i*bases.qtId-bases.qtId+result[j]
+            for(var i =1; i<= pasta.length; i++){
+                await findIdByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                    // console.log(result)
+                    if(result!=0){
+                        // result.id = i*bases.qtId-bases.qtId+result.id
+                        for(let j in result){
+                            result[j] = i*bases.qtId-bases.qtId+result[j]
+                        }
+                        arrayReturn[cont++] = result
+                        // console.log(result) 
+                        // console.log(item)
                     }
-                    item[cont++] = result
-                    // console.log(result) 
-                    // console.log(item)
-                }
-            }).catch(console.log)
+                }).catch(console.log)
+                // if(id > 0){
+                //     arrayReturn[cont]= i*bases.qtId-bases.qtId+id
+                //     cont++;
+                //     id = null
+                // }else{
+                //         // console.log('else')
+                // }
+            }
         }
         return arrayReturn
     }catch(err){
