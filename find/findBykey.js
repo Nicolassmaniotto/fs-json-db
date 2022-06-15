@@ -23,8 +23,10 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
             let jsonParsed = tryJson(file[i])
             if(!jsonParsed) continue
             if(keyName in jsonParsed){
-                result[cont] = i+1;
-                cont++;
+                result[cont++] = i+1;
+                if(bases.findQt && cont>=bases.findQt){
+                    break
+                }
             }
 
         } 
@@ -60,8 +62,10 @@ async function findItemByKey(dir,keyName,valor =null,basesParam= null){
                 } 
                 // result[cont] .id = i+1;
                 result[cont++] = valor
+                if(bases.findQt && cont>=bases.findQt){
+                    break
+                }
             }
-
         } 
         return result
     }catch(err){

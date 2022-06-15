@@ -87,17 +87,24 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         var cont =0;
         if(typeFind == 'regex' || typeFind =='1' || typeFind == null){
             for(var i =1; i<= pasta.length; i++){
-                await findItem(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                await findItem(`${dir}/${i}.jsonl` ,findVar,bases).then((result)=>{
                     // console.log(result)
                     if(result!=0){
-                        result.id = i*bases.qtId-bases.qtId+result.id
+                        result.id = i*bases                
+                        // if(id > 0){
+                        //     arrayReturn[cont]= i*bases.qtId-bases.qtId+id
+                        //     cont++;
+                        //     id = null
+                        // }else{
+                        //         // console.log('else')
+                        // }.qtId-bases.qtId+result.id
                         item[cont++] = result
                         // console.log(item)
                     }
                 }).catch(console.log)
             }
         }else if(typeFind == 'key'|| typeFind == '2'){
-            console.log('passou aqui')
+            // console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
                 await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases).then((result)=>{
                     // console.log(result)
@@ -111,6 +118,10 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
                         // console.log(item)
                     }
                 }).catch(console.log)
+                if(item.length>= bases.findQt){
+                    // console.log('aqui')
+                    break
+                }
                 // if(id > 0){
                 //     arrayReturn[cont]= i*bases.qtId-bases.qtId+id
                 //     cont++;

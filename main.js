@@ -182,8 +182,10 @@ for(let i =0;i<=100;i++){
     }
     // addItemSync('teste',JSON.stringify(dataJson)) 
 }
-
-await findItemInAll('teste','nome',2).then(console.log).catch(console.log)
+let bases = {
+    findQt : 1
+}
+await findItemInAll('teste','nome',2,bases).then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",
