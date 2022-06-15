@@ -99,7 +99,7 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         }else if(typeFind == 'key'|| typeFind == '2'){
             console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
-                await findItemByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
+                await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases).then((result)=>{
                     // console.log(result)
                     if(result!=0){
                         // result.id = i*bases.qtId-bases.qtId+result.id
@@ -132,7 +132,7 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         //             // console.log(item)
         //         }
         //     }).catch(console.log)
-        findIdByKey
+        // findIdByKey
         //     // console.log(item)
         //     // console.log(i)
         // }
