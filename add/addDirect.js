@@ -1,3 +1,6 @@
+import {Bases} from '../bases.js'
+import * as fs from 'fs'
+
 async function addItem(dir,data,basesParam =null){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
@@ -16,18 +19,18 @@ async function addItem(dir,data,basesParam =null){
             })
             return  'criado'
         }
-        let files = fs.readFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`, 'utf8');
+        let files = fs.readFileSync(`${bases.dir}/${dir}/${pastas.length}.jsonl`, 'utf8');
         let calc = files.match(/\n/g).length;
         // console.log(calc)
         if(calc >= bases.qtId){
-            fs.writeFile(`${bases.dir}${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
+            fs.writeFile(`${bases.dir}/${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
                 if (err) throw err;
             // console.log('O arquivo foi criado!');
             return 'success'
             });
             return 'add item E OU criado novo'
         }else if(calc < bases.qtId){
-            fs.appendFile(`${bases.dir}${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
+            fs.appendFile(`${bases.dir}/${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
                 if(!err){
                     // console.log('The file has been saved!');
                     // return 'success';
@@ -42,7 +45,7 @@ async function addItem(dir,data,basesParam =null){
     }
 
 }
-function addItemSync(dir,data,basesParam =null){
+async function addItemSync(dir,data,basesParam =null){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
     basesParam  =  basesParam||{noParam:0}
@@ -60,18 +63,18 @@ function addItemSync(dir,data,basesParam =null){
             })
             return  'criado'
         }
-        let files = fs.readFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`, 'utf8');
+        let files = fs.readFileSync(`${bases.dir}/${dir}/${pastas.length}.jsonl`, 'utf8');
         let calc = files.match(/\n/g).length;
         // console.log(calc)
         if(calc >= bases.qtId){
-            fs.writeFileSync(`${bases.dir}${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
+            fs.writeFileSync(`${bases.dir}/${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
                 if (err) throw err;
             // console.log('O arquivo foi criado!');
             return 'success'
             });
             return 'add item E OU criado novo'
         }else if(calc < bases.qtId){
-            fs.appendFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
+            fs.appendFileSync(`${bases.dir}/${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
                 if(!err){
                     // console.log('The file has been saved!');
                     // return 'success';

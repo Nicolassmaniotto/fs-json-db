@@ -89,12 +89,13 @@ let basesParam = {
     //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
     // } 
    await  createDB('teste')
-for(let i =0;i<=100;i++){
+for(let i =1;i<=100;i++){
     let dataJson = {
         user:i,
         erros:["erro","contem","errou"]
     }
-    addItemSync('teste',JSON.stringify(dataJson)) 
+    console.log(i)
+    addItemSync('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log)
 }
 let bases = {
     findQt : null
@@ -106,5 +107,5 @@ let jsonVar = {
     nome:"unamed",
     algo:['algo','2','5']
 }
-update('teste',5,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
+// update('teste',5,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
 /* */
