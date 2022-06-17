@@ -94,7 +94,7 @@ for(let i =0;i<=100;i++){
         user:i,
         erros:["erro","contem","errou"]
     }
-    // addItemSync('teste',JSON.stringify(dataJson)) 
+    addItemSync('teste',JSON.stringify(dataJson)) 
 }
 let bases = {
     findQt : null
