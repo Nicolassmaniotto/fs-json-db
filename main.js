@@ -6,12 +6,15 @@ import * as r from './reader.js';
 import * as readline from 'readline';
 import * as fs from 'fs';
 import {findIdInAll,findItemInAll} from './find/index.js';
+import { addItem,addItemSync } from './add/index.js';
+import {Bases} from './bases.js'
 
-const Bases = {
-    qtId:10,
-    dir:'data/DB/'
 
-}
+// const Bases = {
+//     qtId:10,
+//     dir:'data/DB/'
+
+// }
 async function createDB(name,basesParam=null){
     // cria o banco 
     basesParam  =  basesParam||{noParam:0}
@@ -27,95 +30,6 @@ async function createDB(name,basesParam=null){
     }
 
 }
-async function addItem(dir,data,basesParam =null){
-    // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
-    // se for maior criar novo arquivo e adiona os outros ids
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-        if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD nao existe'
-        let pastas = fs.readdirSync(`${bases.dir}/${dir}`);
-        // console.log(pastas[pastas.length-1])
-        if(!pastas[pastas.length-1]){
-            fs.writeFile(`${bases.dir}/${dir}/1.jsonl`,`${data}\n`, (err) => {
-                if (err) throw err;
-            console.log('O arquivo foi criado!');
-            return 'success'
-            })
-            return  'criado'
-        }
-        let files = fs.readFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`, 'utf8');
-        let calc = files.match(/\n/g).length;
-        // console.log(calc)
-        if(calc >= bases.qtId){
-            fs.writeFile(`${bases.dir}${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
-                if (err) throw err;
-            // console.log('O arquivo foi criado!');
-            return 'success'
-            });
-            return 'add item E OU criado novo'
-        }else if(calc < bases.qtId){
-            fs.appendFile(`${bases.dir}${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
-                if(!err){
-                    // console.log('The file has been saved!');
-                    // return 'success';
-                }
-                return 'error'
-            })
-            return 'add item'
-        }
-        return 'por algum motivo algo não aconteceu'
-    }catch(err){
-        return err
-    }
-
-}
-function addItemSync(dir,data,basesParam =null){
-    // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
-    // se for maior criar novo arquivo e adiona os outros ids
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-        if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD nao existe'
-        let pastas = fs.readdirSync(`${bases.dir}/${dir}`);
-        // console.log(pastas[pastas.length-1])
-        if(!pastas[pastas.length-1]){
-            fs.writeFileSync(`${bases.dir}/${dir}/1.jsonl`,`${data}\n`, (err) => {
-                if (err) throw err;
-            console.log('O arquivo foi criado!');
-            return 'success'
-            })
-            return  'criado'
-        }
-        let files = fs.readFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`, 'utf8');
-        let calc = files.match(/\n/g).length;
-        // console.log(calc)
-        if(calc >= bases.qtId){
-            fs.writeFileSync(`${bases.dir}${dir}/${pastas.length+1}.jsonl`, `${data}\n`, (err) => {
-                if (err) throw err;
-            // console.log('O arquivo foi criado!');
-            return 'success'
-            });
-            return 'add item E OU criado novo'
-        }else if(calc < bases.qtId){
-            fs.appendFileSync(`${bases.dir}${dir}/${pastas.length}.jsonl`,`${data}\n`,(err)=>{
-                if(!err){
-                    // console.log('The file has been saved!');
-                    // return 'success';
-                }
-                return 'error'
-            })
-            return 'add item'
-        }
-        return 'por algum motivo algo não aconteceu'
-    }catch(err){
-        return err
-    }
-
-}
-
 
 
 async function update(dir,id,data,basesParam =null){
@@ -141,7 +55,7 @@ async function update(dir,id,data,basesParam =null){
             // como o resto vai de 0 a 9 e o array file começa em 0 se subtrai 1 para achar a linha correta
             file[resto-1] = data
             var result = file.join("\n")
-            await fs.writeFile(`${bases.dir}${dir}/${calc}.jsonl`, `${result}\n`, (err) => {
+            await fs.writeFile(`${bases.dir}/${dir}/${calc}.jsonl`, `${result}\n`, (err) => {
                 if (err) throw err;
             // console.log('O arquivo foi criado!');
             return 'success'
@@ -169,7 +83,7 @@ let basesParam = {
     // console.log(argv)
     // if(argv[2] == 'create' || argv[1] == 'create'){
     //     createDB('teste').then(console.log).catch(console.log)
-    // }else if(argv[2] == 'add' || argv[1] == 'add'){
+    // }else if(argv[2] == 'add' || argv[1] == '(e) add'){
     //     addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
     // }else if(argv[2] == 'find' || argv[1] == 'find'){
     //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
@@ -183,7 +97,7 @@ for(let i =0;i<=100;i++){
     // addItemSync('teste',JSON.stringify(dataJson)) 
 }
 let bases = {
-    findQt : 1
+    findQt : null
 }
 await findItemInAll('teste','nome',2,bases).then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
