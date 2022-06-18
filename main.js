@@ -96,18 +96,18 @@ let basesParam = {
            key:'isso_é_uma_senha'
        }
    }
-for(let i =1;i<=100;i++){
+for(let i =1;i<=0;i++){
     let dataJson = {
         user:i,
         erros:["erro","contem","errou"]
     }
     console.log(i)
-    addItemIfCrypto('teste',JSON.stringify(dataJson),params).then(console.log).catch(console.log)
+    addItemSync('teste',JSON.stringify(dataJson),params).then(console.log).catch(console.log)
 }
 let bases = {
     findQt : null
 }
-await findItemInAll('teste','nome',2,bases).then(console.log).catch(console.log)
+await findItemInAll('teste','user',2,bases).then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",

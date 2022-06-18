@@ -1,7 +1,7 @@
 import { Bases } from '../bases.js';
 import { tryJson } from '../global/thisIs.js';
 import * as fs from 'fs'
-
+//buscas por chave valor
 async function findIdByKey(dir,keyName,valor =null,basesParam= null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
@@ -11,7 +11,6 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
         if(!keyName) throw 'key não definido'
         if(!keyName.key||keyName.key == null || typeof(keyName.key)=='undefined'){
             data.key = keyName
-            data.qt    = 1
         }
         if(!data.opt){
             data.opt = 'i'
@@ -35,16 +34,16 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
         return err
     }
 }
-async function findItemByKey(dir,keyName,valor =null,basesParam= null){
+async function findItemByKey(dir,keyName,valor =1,basesParam= null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);
+    // console.log(bases)
     try{
         var data = {};
-        if(!keyName) throw 'key não definido'
+        if(!keyName) throw 'key não definida'
         if(!keyName.key||keyName.key == null || typeof(keyName.key)=='undefined'){
             data.key = keyName
-            data.qt    = 1
         }
         if(!data.opt){
             data.opt = 'i'
@@ -56,17 +55,20 @@ async function findItemByKey(dir,keyName,valor =null,basesParam= null){
             let jsonParsed = tryJson(file[i])
             if(!jsonParsed) continue
             if(keyName in jsonParsed){
-                let valor ={
+                if(valor){
+                    // if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
+                }
+                let data ={
                     id : i+1,
                     item: jsonParsed
                 } 
                 // result[cont] .id = i+1;
-                result[cont++] = valor
-                if(bases.findQt && cont>=bases.findQt){
+                result[cont++] = data
+                if(bases.findQt && cont>=bases.findQt && bases.findQt != null){
                     break
                 }
             }
-        } 
+        }
         return result
     }catch(err){
         return err
