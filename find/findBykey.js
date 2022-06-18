@@ -56,7 +56,7 @@ async function findItemByKey(dir,keyName,valor =1,basesParam= null){
             if(!jsonParsed) continue
             if(keyName in jsonParsed){
                 if(valor){
-                    // if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
+                    if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
                 }
                 let data ={
                     id : i+1,

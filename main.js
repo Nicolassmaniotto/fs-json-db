@@ -72,8 +72,9 @@ async function update(dir,id,data,basesParam =null){
 
 
 
-// module.exports ={createDB,addItem,findId,update,addItemSync,findIdInAll,findItemInAll}
-// /* // testes comente essa linha para testar
+// module.exports ={createDB,update,addItemSync,findIdInAll,findItemInAll}
+export{createDB,update,addItemSync,findIdInAll,findItemInAll}
+/* // testes comente essa linha para testar
 
 
 let basesParam = {
@@ -105,7 +106,8 @@ for(let i =1;i<=0;i++){
     addItemSync('teste',JSON.stringify(dataJson),params).then(console.log).catch(console.log)
 }
 let bases = {
-    findQt : null
+    findQt : null,
+    find: '1'
 }
 await findItemInAll('teste','user',2,bases).then(console.log).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
