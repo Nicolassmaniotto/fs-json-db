@@ -48,6 +48,7 @@ async function addItem(dir,data,basesParam =null){
 async function addItemSync(dir,data,basesParam =null){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
+    // era Syncrono, so nome continua assim
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);

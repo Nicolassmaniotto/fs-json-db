@@ -106,5 +106,5 @@ async function readLineFile(dir,func){
 
 
 // module.exports = {readMakeDir,updateStatus,readStatus,readMakeFile,readLineFile};
-export{readMakeDir,updateStatus,readStatus,readMakeFile,readLineFile};
+export{readMakeDir};
 // module.exports = {}
