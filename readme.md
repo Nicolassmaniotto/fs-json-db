@@ -3,6 +3,7 @@
 ### Sistema de acesso baseado no funcionamento de NoSQL file databases.
 
 ## THIS IS ALPHA
+##### Feature Branch
 
 #### JSON Escolhido por ser mais facil controlar os dados a serem inserido sem nescessariamente saber quais serao esses dados.
 
@@ -23,7 +24,6 @@
 ### Como usar:
 * Pode ser usado duas formas de chamada:
    1. import  {findItemInAll} from "fs-json-db"
-   2. const DB = require("fs-json-db")
 * Para instalar no seu projeto use:
    1. yarn add fs-json-db
    2. npm install --save fs-json-db
