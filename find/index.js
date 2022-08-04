@@ -66,7 +66,7 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
 }
 
 async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
-    basesParam  =  basesParam||{noParam:0}
+    basesParam  =  basesParam||{noParam:0,find:null}
     let bases  = Bases
     Object.assign(bases,basesParam);
     try{
@@ -106,7 +106,7 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         }else if(typeFind == 'key'|| typeFind == '2'){
             // console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
-                await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases).then((result)=>{
+                await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
                     // console.log(result)
                     if(result!=0){
                         // result.id = i*bases.qtId-bases.qtId+result.id
@@ -118,8 +118,8 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
                         // console.log(item)
                     }
                 }).catch(console.log)
-                if(item.length>= bases.findQt){
-                    // console.log('aqui')
+                if(item.length>= bases.findQt && bases.findQt != null){
+                    console.log(bases.findQt )
                     break
                 }
                 // if(id > 0){

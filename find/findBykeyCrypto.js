@@ -75,7 +75,7 @@ async function findItemByKey(dir,keyName,valor =1,basesParam= null){
     }
 }
 
-export {findIdByKey,findItemByKey}
+export {findItemByKey}
 
 /*
 

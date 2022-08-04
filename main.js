@@ -3,10 +3,11 @@
 // const fs = require('fs')
 
 import * as r from './reader.js';
-import * as readline from 'readline';
+// import * as readline from 'readline';
 import * as fs from 'fs';
 import {findIdInAll,findItemInAll} from './find/index.js';
-import { addItem,addItemSync } from './add/index.js';
+import { addItem,addItemSync, addItemIfCrypto } from './add/index.js';
+// import { addItemIfCrypto } from './add/addUsingCrypto.js';
 import {Bases} from './bases.js'
 
 
@@ -71,7 +72,8 @@ async function update(dir,id,data,basesParam =null){
 
 
 
-// module.exports ={createDB,addItem,findId,update,addItemSync,findIdInAll,findItemInAll}
+// module.exports ={createDB,update,addItemSync,findIdInAll,findItemInAll}
+// export{createDB,update,addItemSync,findIdInAll,findItemInAll}
 // /* // testes comente essa linha para testar
 
 
@@ -89,22 +91,24 @@ let basesParam = {
     //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
     // } 
    await  createDB('teste')
-for(let i =0;i<=100;i++){
+for(let i =1;i<=100;i++){
     let dataJson = {
         user:i,
         erros:["erro","contem","errou"]
     }
-    // addItemSync('teste',JSON.stringify(dataJson)) 
+    console.log(i)
+    addItemIfCrypto('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log)
 }
 let bases = {
-    findQt : null
+    findQt : 1,
+    find: 'algo'
 }
-await findItemInAll('teste','nome',2,bases).then(console.log).catch(console.log)
+await findItemInAll('teste','algo[1]',2,bases).then(console.table).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",
     nome:"unamed",
     algo:['algo','2','5']
 }
-update('teste',5,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
+// update('teste',5,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
 /* */
