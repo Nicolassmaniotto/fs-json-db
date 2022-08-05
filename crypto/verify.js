@@ -1,5 +1,6 @@
 export function vCrypto(params){
     //verifica a criptpografia
+    // e prepara os parametros
     try{
         if(!params.crypto) throw '03180901' //cry01 sem cryptografia
         if(!params.crypto.type) throw '03180901' //cry01 sem cryptografia
