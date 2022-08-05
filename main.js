@@ -91,7 +91,7 @@ let basesParam = {
     //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
     // } 
    await  createDB('teste')
-for(let i =1;i<=100;i++){
+for(let i =1;i<=2;i++){
     let dataJson = {
         user:i,
         erros:["erro","contem","errou"]

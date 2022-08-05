@@ -34,7 +34,7 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
         return err
     }
 }
-async function findItemByKey(dir,keyName,valor =1,basesParam= null){
+async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);
@@ -75,7 +75,7 @@ async function findItemByKey(dir,keyName,valor =1,basesParam= null){
     }
 }
 
-export {findItemByKey}
+export {findItemByKeyCrypto}
 
 /*
 
