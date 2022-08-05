@@ -1,6 +1,9 @@
 import { Bases } from '../bases.js';
 import { tryJson } from '../global/thisIs.js';
+import { deCrypto } from '../crypto/decrypto.js';
+
 import * as fs from 'fs'
+import { vCrypto } from '../crypto/verify.js';
 //buscas por chave valor
 async function findIdByKey(dir,keyName,valor =null,basesParam= null){
     basesParam  =  basesParam||{noParam:0}
@@ -39,6 +42,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
     let bases  = Bases
     Object.assign(bases,basesParam);
     // console.log(bases)
+    bases = vCrypto(bases)
     try{
         var data = {};
         if(!keyName) throw 'key não definida'
@@ -52,7 +56,9 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
         var result = []
         var cont = 0;
         for(var i =0;i<bases.qtId;i++){
-            let jsonParsed = tryJson(file[i])
+            // adicionar função de descryptografar
+            let jsonParsed = deCrypto(file[i],bases)
+            jsonParsed= tryJson(jsonParsed)
             if(!jsonParsed) continue
             if(keyName in jsonParsed){
                 if(valor){

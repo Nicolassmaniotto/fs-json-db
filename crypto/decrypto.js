@@ -6,6 +6,7 @@ function deCrypto(data,params){
     try{
         var result = 'null'; // variavel de resultados
         params = vCrypto(params)
+        // console.log(params)
         if(typeof(params) != 'object') throw params;
         if(params.crypto.type.toLowerCase() == 'sumsymple'){
             // criptografia chave valor por soma

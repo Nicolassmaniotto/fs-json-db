@@ -72,7 +72,8 @@ async function update(dir,id,data,basesParam =null){
 
 
 
-// module.exports ={createDB,update,addItemSync,findIdInAll,findItemInAll}
+module.exports ={createDB,update,addItemSync,findIdInAll,findItemInAll} /* // testes comente essa linha para testar
+
 // export{createDB,update,addItemSync,findIdInAll,findItemInAll}
 // /* // testes comente essa linha para testar
 
@@ -91,7 +92,7 @@ let basesParam = {
     //     findId('teste/1.jsonl','contem').then(console.log).catch(console.log)
     // } 
    await  createDB('teste')
-for(let i =1;i<=2;i++){
+for(let i =11;i<=20;i++){
     let dataJson = {
         user:i,
         erros:["erro","contem","errou"]
@@ -101,9 +102,9 @@ for(let i =1;i<=2;i++){
 }
 let bases = {
     findQt : 1,
-    find: 'algo'
+    find: '11'
 }
-await findItemInAll('teste','algo[1]',2,bases).then(console.table).catch(console.log)
+await findItemInAll('teste','user','3',bases).then(console.table).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",

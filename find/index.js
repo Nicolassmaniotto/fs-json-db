@@ -2,6 +2,7 @@ import {Bases} from '../bases.js'
 
 import {findId,findItem} from './findByRegex.js'
 import { findIdByKey,findItemByKey } from './findBykey.js'
+import { findItemByKeyCrypto } from './findBykeyCrypto.js'
 import * as fs from 'fs'
 async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
     basesParam  =  basesParam||{noParam:0}
@@ -14,7 +15,7 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
         let  id;
         let  arrayReturn=[];
         var cont=0;
-        if(typeFind == 'regex' || typeFind =='1' || typeFind == null){
+        if(typeFind.toLowerCase() == 'regex' || typeFind =='1' || typeFind == null){
             for(var i =1; i<= pasta.length; i++){
                 await findId(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
                     if(result!=0){
@@ -35,7 +36,7 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
                 //         // console.log('else')
                 // }
             }
-        }else if(typeFind == 'key'|| typeFind == '2'){
+        }else if(typeFind.toLowerCase() == 'key'|| typeFind == '2'){
             for(var i =1; i<= pasta.length; i++){
                 await findIdByKey(`${dir}/${i}.jsonl` ,findVar).then((result)=>{
                     // console.log(result)
@@ -45,18 +46,11 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
                             result[j] = i*bases.qtId-bases.qtId+result[j]
                         }
                         arrayReturn[cont++] = result
-                        // console.log(result) 
-                        // console.log(item)
                     }
                 }).catch(console.log)
-                // if(id > 0){
-                //     arrayReturn[cont]= i*bases.qtId-bases.qtId+id
-                //     cont++;
-                //     id = null
-                // }else{
-                //         // console.log('else')
-                // }
             }
+        }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
+            findItemByKeyCrypto()
         }
         return arrayReturn
     }catch(err){
@@ -67,7 +61,9 @@ async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
 
 async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
     basesParam  =  basesParam||{noParam:0,find:null}
+    console.log(basesParam)
     let bases  = Bases
+    
     Object.assign(bases,basesParam);
     try{
 
@@ -85,7 +81,7 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         }
         let  item=[];
         var cont =0;
-        if(typeFind == 'regex' || typeFind =='1' || typeFind == null){
+        if(typeFind.toLowerCase() == 'regex' || typeFind =='1' || typeFind == null){
             for(var i =1; i<= pasta.length; i++){
                 await findItem(`${dir}/${i}.jsonl` ,findVar,bases).then((result)=>{
                     // console.log(result)
@@ -103,7 +99,7 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
                     }
                 }).catch(console.log)
             }
-        }else if(typeFind == 'key'|| typeFind == '2'){
+        }else if(typeFind.toLowerCase() == 'key'|| typeFind == '2'){
             // console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
                 await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
@@ -130,7 +126,28 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
                 //         // console.log('else')
                 // }
             }
+        }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
+            
+            for(var i =1; i<= pasta.length; i++){
+                await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                    //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                    // console.log(result)
+                    if(result!=0){
+                        // result.id = i*bases.qtId-bases.qtId+result.id
+                        for(let j in result){
+                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                        }
+                        item = item.concat(result)
+                        console.log(item)
+                    }
+                }).catch(console.log)
+                if(item.length>= bases.findQt && bases.findQt != null){
+                    console.log(bases.findQt )
+                    break
+                }
+            }
         }
+
         // for(var i =1; i<= pasta.length; i++){
         //     // var file = parseInt(i)+1
         //     // console.log('item '+i+' de '+pasta.length)
@@ -149,7 +166,8 @@ async function findItemInAll(dir,findVar,typeFind = 1,basesParam =null){
         // }
         return item
     }catch(err){
-        console.log('erro')
+        // console.log('erro')
+        console.log(err)
         return err
     }
 }

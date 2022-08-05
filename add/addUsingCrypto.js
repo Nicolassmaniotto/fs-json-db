@@ -10,16 +10,16 @@ async function addItemIfCrypto(dir,data,params){
         params  =  params||{noParam:0}
         let bases  = Bases
         Object.assign(params,bases);
-        console.log(JSON.stringify(params))
+        // console.log(JSON.stringify(params))
         params  =  vCrypto(params);
-        console.log(JSON.stringify(params))
+        // console.log(JSON.stringify(params))
         if(typeof(params)=='string') throw params;
 
         if(typeof(data) != 'string'){
             data = JSON.stringify(data);
         }
         let item = enCrypto(data,params)
-        addItemSync(dir,item,params)
+        result = addItemSync(dir,item,params)
         return result;
     }catch(err){
         return err
