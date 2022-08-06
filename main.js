@@ -72,7 +72,7 @@ async function update(dir,id,data,basesParam =null){
 
 
 
-module.exports ={createDB,update,addItemSync,findIdInAll,findItemInAll} /* // testes comente essa linha para testar
+export{createDB,update,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
 
 // export{createDB,update,addItemSync,findIdInAll,findItemInAll}
 // /* // testes comente essa linha para testar
