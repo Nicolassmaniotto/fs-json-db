@@ -6,7 +6,7 @@ function addItem(dir,data,params =null,typeAdd = '1'){
     try{
         params  =  params||{noParam:0}
         Object.assign(Bases,params);
-        console.log(Bases)
+        // console.log(Bases)
         params = Bases
         if(typeAdd.toLowerCase() == 'sync' || typeAdd =='1' || typeAdd == null){
            return addItemSync(dir,data,params)

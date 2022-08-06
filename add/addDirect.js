@@ -59,7 +59,7 @@ async function addItemSync(dir,data,basesParam =null){
         if(!pastas[pastas.length-1]){
             fs.writeFileSync(`${bases.dir}/${dir}/1.jsonl`,`${data}\n`, (err) => {
                 if (err) throw err;
-            console.log('O arquivo foi criado!');
+            // console.log('O arquivo foi criado!');
             return 'success'
             })
             return  'criado'

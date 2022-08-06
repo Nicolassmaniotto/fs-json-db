@@ -97,14 +97,14 @@ for(let i =11;i<=20;i++){
         user:i,
         erros:["erro","contem","errou"]
     }
-    console.log(i)
+    // console.log(i)
     addItem('teste',JSON.stringify(dataJson),null,'2').then(console.log).catch(console.log)
 }
 let bases = {
     findQt : 1,
     find: '11'
 }
-await findItemInAll('teste','user','3',bases).then(console.table).catch(console.log)
+await findItemInAll('teste','user',bases,'3').then(console.table).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
 let jsonVar = {
     user:"usuario",
