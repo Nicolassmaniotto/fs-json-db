@@ -72,7 +72,7 @@ async function update(dir,id,data,basesParam =null){
 
 
 
-export{createDB,update,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
+export{createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
 
 // export{createDB,update,addItemSync,findIdInAll,findItemInAll}
 // /* // testes comente essa linha para testar
@@ -98,7 +98,7 @@ for(let i =11;i<=20;i++){
         erros:["erro","contem","errou"]
     }
     console.log(i)
-    addItemIfCrypto('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log)
+    addItem('teste',JSON.stringify(dataJson),null,'2').then(console.log).catch(console.log)
 }
 let bases = {
     findQt : 1,

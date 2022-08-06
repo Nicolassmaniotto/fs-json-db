@@ -1,7 +1,7 @@
 import {Bases} from '../bases.js'
 import * as fs from 'fs'
 
-async function addItem(dir,data,basesParam =null){
+async function addItemAsync(dir,data,basesParam =null){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
     basesParam  =  basesParam||{noParam:0}
@@ -91,4 +91,4 @@ async function addItemSync(dir,data,basesParam =null){
 
 }
 
-export{addItem,addItemSync}
+export{addItemAsync,addItemSync}

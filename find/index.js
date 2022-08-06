@@ -4,7 +4,7 @@ import {findId,findItem} from './findByRegex.js'
 import { findIdByKey,findItemByKey } from './findBykey.js'
 import { findItemByKeyCrypto } from './findBykeyCrypto.js'
 import * as fs from 'fs'
-async function findIdInAll(dir,findVar,typeFind = 1,basesParam =null){
+async function findIdInAll(dir,findVar,typeFind = '1',basesParam =null){
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases
     Object.assign(bases,basesParam);
