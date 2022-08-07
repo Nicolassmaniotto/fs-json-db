@@ -3,7 +3,9 @@
 ### Sistema de acesso baseado no funcionamento de NoSQL file databases.
 
 ## THIS IS ALPHA
+
 ##### Feature Branch
+##### Liberado funçoes de cryptografia
 
 #### JSON Escolhido por ser mais facil controlar os dados a serem inserido sem nescessariamente saber quais serao esses dados.
 
@@ -41,20 +43,38 @@
       createDB(dirName) //chamada simples
       ```
 * ```js 
-   addItem(DBname,data) //adiciona item de modo asyncrono da erro em alguns casos se for adicionar varios items de um vez use o addItemSync()
+   addItem(DBname,data) //adiciona items de modo sincrono
    ``` 
-* ```js
-   addItemSync(DBname,data) //adiciona items de modo syncrono
-   ```
-   * ```js
-      //exemplo
-      data.forEach((element)=>{
-            // adiciona todos os items do array data ao banco de dados user
-         addItemSync('user',JSON.Stringfy(element))
-      })
+* ```js 
+   addItem(DBname,data,params,typeAdd) // mudado para adicionar mais opções pela mesma função
+
+   const params = { // exemplo de variavel params
+        qtId:10, // quantidade de items salvo por vez
+        dir:'./data/DB', // diretorio de armazenamento e busca
+        findQt : null,// quatidade de items a ser buscado por vez, null == todos
+        crypto:{ // nescessario apenas se usar crypto
+            type:'sumsymple',//tipo de cryptografia
+            key:'isso_é_uma_senha'//senha
+        }
+    }
+   const typeAdd = '1' // 1 sincrono; 2 Crypto
+   ``` 
 * ```js
    findIdInAll(DBname,"/regex/") //busca id pelo valor do regex
    ```
 * ```js
-   findItemInAll(DBname,"/regex/") //retorna o id pelo valor do regex
+   findItemInAll(DBname,"/regex/",params,typeFind) 
+   //retorna o item exemplo, item = [ { id: 1, item: { user: 11, erros: [Array] } } ]
+   //obs: id é o numero da linha
+
+   const params = { // exemplo de variavel params
+        qtId:10, // quantidade de items salvo por vez
+        dir:'./data/DB', // diretorio de armazenamento e busca
+        findQt : null,// quatidade de items a ser buscado por vez, null == todos
+        crypto:{ // nescessario apenas se usar crypto
+            type:'sumsymple',//tipo de cryptografia
+            key:'isso_é_uma_senha'//senha
+        }
+    }
+   const typeFind= '1' // 1 regex, 2 cahve valor, 3 chave valor com cryptografia
    ```
