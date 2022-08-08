@@ -3,12 +3,15 @@
 // const fs = require('fs')
 
 import * as r from './reader.js';
-// import * as readline from 'readline';
+
 import * as fs from 'fs';
+import {Bases} from './bases.js'
+
 import {findIdInAll,findItemInAll} from './find/index.js';
 import { addItem,addItemSync, addItemIfCrypto } from './add/index.js';
+import {update} from './update/index.js'
 // import { addItemIfCrypto } from './add/addUsingCrypto.js';
-import {Bases} from './bases.js'
+
 
 
 // const Bases = {
@@ -33,46 +36,11 @@ async function createDB(name,basesParam=null){
 }
 
 
-async function update(dir,id,data,basesParam =null){
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
-    try{
-        if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD não exist'
-        let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
-        var calc;
-        if(pasta.length==0){
-            var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
-            console.log(file[id])
-            return 'if 1'
-        }else{
-            var calc = parseInt((bases.qtId+id)/bases.qtId)
-            if(calc>pasta.length) throw calc
-            console.log(calc)
-            var resto = parseFloat((((bases.qtId+id)/bases.qtId)%1).toFixed(1))*10
-            console.log(resto)
-            // calc = calc -id
-            var file = fs.readFileSync(`${bases.dir}/${dir}/${calc}.jsonl`, 'utf8').split('\n');
-            // como o resto vai de 0 a 9 e o array file começa em 0 se subtrai 1 para achar a linha correta
-            file[resto-1] = data
-            var result = file.join("\n")
-            await fs.writeFile(`${bases.dir}/${dir}/${calc}.jsonl`, `${result}\n`, (err) => {
-                if (err) throw err;
-            // console.log('O arquivo foi criado!');
-            return 'success'
-            });
-            return 'atualizado'
-        // calc
-        }
-    }catch(err){
-        return err
-    }
-}
 
 
 
 
-export{createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
+// export{createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
 
 // export{createDB,update,addItemSync,findIdInAll,findItemInAll}
 // /* // testes comente essa linha para testar
@@ -102,7 +70,8 @@ for(let i =11;i<=20;i++){
 }
 let bases = {
     findQt : 1,
-    find: '11'
+    find: '11',
+    id:'50'
 }
 await findItemInAll('teste','user',bases,'3').then(console.table).catch(console.log)
 // createDB('teste').then(console.log).catch(console.log)l
@@ -111,5 +80,5 @@ let jsonVar = {
     nome:"unamed",
     algo:['algo','2','5']
 }
-// update('teste',5,JSON.stringify(jsonVar)).then(console.log).catch(console.log)
+update('teste',5,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
 /* */
