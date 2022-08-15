@@ -40,7 +40,7 @@ async function createDB(name,basesParam=null){
 
 
 
-// export{createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
+export{createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto} /* // testes comente essa linha para testar
 
 // export{createDB,update,addItemSync,findIdInAll,findItemInAll}
 // /* // testes comente essa linha para testar
