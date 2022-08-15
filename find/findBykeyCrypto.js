@@ -40,9 +40,9 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
 async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
 
     try{
-        console.log(dir)
-        console.log(keyName)
-        console.log(valor)
+        // console.log(dir)
+        // console.log(keyName)
+        // console.log(valor)
         basesParam  =  basesParam||{noParam:0}
         let bases  = Bases
         Object.assign(bases,basesParam);
@@ -60,7 +60,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
         var pos = 0;
         // var file;
         if(typeof(keyName) =='number'){
-            console.log(pos)
+            // console.log(pos)
             pos = (parseInt(keyName)+parseInt(bases.qtId))/bases.qtId;
             pos = parseInt(pos)
             console.log(keyName)
@@ -77,7 +77,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
         var cont = 0;
         if(pos>0){
             bases.qtId = pos
-            console.log(pos)
+            // console.log(pos)
         }
         for(var i =pos;i<bases.qtId;i++){
             // adicionar função de descryptografar
