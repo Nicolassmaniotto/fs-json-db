@@ -3,9 +3,9 @@
 // import {decryptoSimple} from 'encryptosumsimple'
 // const Bases = require('./bases.js')
 const fs  = require('fs')
-const cryptosumsimple = require('cryptosumsimple')
-const decryptoSimple = cryptosumsimple.decryptoSimple;
-const encryptoSimple = cryptosumsimple.encryptoSimple;
+const encryptosumsimple = require('encryptosumsimple')
+const decryptoSimple = encryptosumsimple.decryptoSimple;
+const encryptoSimple = encryptosumsimple.encryptoSimple;
 
 
 const Bases = {
