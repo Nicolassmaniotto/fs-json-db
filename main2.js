@@ -118,7 +118,7 @@ async function addItemSync(dir,data,basesParam =null){
     let bases  = Bases
     Object.assign(bases,basesParam);
     try{
-        if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD nao existe'
+        if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro DB nao existe'
         let pastas = fs.readdirSync(`${bases.dir}/${dir}`);
         // console.log(pastas[pastas.length-1])
         if(!pastas[pastas.length-1]){
@@ -145,13 +145,15 @@ async function addItemSync(dir,data,basesParam =null){
                     // console.log('The file has been saved!');
                     // return 'success';
                 }
-                return 'error'
+                else{
+                    throw 'error'
+                }
             })
             return 'add item'
         }
         return 'por algum motivo algo não aconteceu'
     }catch(err){
-        return err
+        throw err
     }
 
 }
@@ -171,10 +173,12 @@ async function addItemIfCrypto(dir,data,params){
             data = JSON.stringify(data);
         }
         let item = enCrypto(data,params)
-        result = addItemSync(dir,item,params)
+        result = addItemSync(dir,item,params).then((result)=>{return result}).catch((err)=>{if(err)throw err} )
+        
+        
         return result;
     }catch(err){
-        return err
+        throw err
     }
 
 }
@@ -186,12 +190,15 @@ function addItem(dir,data,params =null,typeAdd = '1'){
         // console.log(Bases)
         params = Bases
         if(typeAdd.toLowerCase() == 'sync' || typeAdd =='1' || typeAdd == null){
-           return addItemSync(dir,data,params)
+           return addItemSync(dir,data,params).then((result)=>{
+            return result
+           }).catch((err)=>{
+            if(err)throw err;})
         }else if(typeAdd.toLowerCase() == 'crypto' || typeAdd =='2'){
-           return addItemIfCrypto(dir,data,params)
+           return addItemIfCrypto(dir,data,params).then((result)=>{return result}).catch((err)=>{if(err)throw err} )
         }
     }catch(err){
-        return err
+        throw err
     }
 
 }

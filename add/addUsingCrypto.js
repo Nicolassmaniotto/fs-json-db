@@ -22,7 +22,7 @@ async function addItemIfCrypto(dir,data,params){
         result = addItemSync(dir,item,params)
         return result;
     }catch(err){
-        return err
+        throw err
     }
 
 }

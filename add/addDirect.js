@@ -41,7 +41,7 @@ async function addItemAsync(dir,data,basesParam =null){
         }
         return 'por algum motivo algo não aconteceu'
     }catch(err){
-        return err
+        throw err
     }
 
 }
@@ -86,7 +86,7 @@ async function addItemSync(dir,data,basesParam =null){
         }
         return 'por algum motivo algo não aconteceu'
     }catch(err){
-        return err
+        throw err
     }
 
 }

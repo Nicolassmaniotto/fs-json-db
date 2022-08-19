@@ -14,7 +14,7 @@ function addItem(dir,data,params =null,typeAdd = '1'){
            return addItemIfCrypto(dir,data,params)
         }
     }catch(err){
-        return err
+        throw err
     }
 
 }
