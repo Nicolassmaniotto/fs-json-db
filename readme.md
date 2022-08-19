@@ -26,6 +26,7 @@
 ### Como usar:
 * Pode ser usado duas formas de chamada:
    1. import  {findItemInAll} from "fs-json-db"
+   2. const fs_json_db = require('fs-json-db')
 * Para instalar no seu projeto use:
    1. yarn add fs-json-db
    2. npm install --save fs-json-db

@@ -685,4 +685,5 @@ async function teste(){
     update('teste',5,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
 }
 
-teste()
+//teste()
+module.exports = {createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto}
