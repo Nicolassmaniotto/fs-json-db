@@ -1,12 +1,12 @@
 import {Bases} from '../bases.js'
 import * as fs from 'fs'
 
-async function addItemAsync(dir,data,basesParam =null){
+async function addItemAsync(dir,data,bases){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
+    // basesParam  =  basesParam||{noParam:0}
+    // let bases  = Bases
+    // Object.assign(bases,basesParam);
     try{
         if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD nao existe'
         let pastas = fs.readdirSync(`${bases.dir}/${dir}`);
@@ -45,13 +45,13 @@ async function addItemAsync(dir,data,basesParam =null){
     }
 
 }
-async function addItemSync(dir,data,basesParam =null){
+async function addItemSync(dir,data,bases){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
     // era Syncrono, so nome continua assim
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
+    // basesParam  =  basesParam||{noParam:0}
+    // let bases  = Bases
+    // Object.assign(bases,basesParam);
     try{
         if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro BD nao existe'
         let pastas = fs.readdirSync(`${bases.dir}/${dir}`);

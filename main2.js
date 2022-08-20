@@ -3,7 +3,8 @@
 // import {decryptoSimple} from 'encryptosumsimple'
 // const Bases = require('./bases.js')
 const fs  = require('fs')
-const encryptosumsimple = require('encryptosumsimple')
+const encryptosumsimple = require('encryptosumsimple');
+const { param } = require('express/lib/request');
 const decryptoSimple = encryptosumsimple.decryptoSimple;
 const encryptoSimple = encryptosumsimple.encryptoSimple;
 
@@ -110,13 +111,17 @@ async function createDB(name,basesParam=null){
 
 }
 
-async function addItemSync(dir,data,basesParam =null){
+async function addItemSync(dir,data,bases){
     // adiciona itens por arquivo de 0 a 9, cada linha equivale a um id
     // se for maior criar novo arquivo e adiona os outros ids
     // era Syncrono, so nome continua assim
-    basesParam  =  basesParam||{noParam:0}
-    let bases  = Bases
-    Object.assign(bases,basesParam);
+    // basesParam  =  basesParam||{noParam:0}
+    // console.log(basesParam)
+    // let bases  = Bases
+    // console.log(bases)
+    // Object.assign(bases,basesParam);
+    // console.log(bases)
+
     try{
         if(!fs.existsSync(`${bases.dir}/${dir}`)) throw 'erro DB nao existe'
         let pastas = fs.readdirSync(`${bases.dir}/${dir}`);
@@ -161,9 +166,9 @@ async function addItemIfCrypto(dir,data,params){
     try{
         // console.log(JSON.stringify(params))
         let result;
-        params  =  params||{noParam:0}
-        let bases  = Bases
-        Object.assign(params,bases);
+        // params  =  params||{noParam:0}
+        // let bases  = Bases
+        // Object.assign(params,bases);
         // console.log(JSON.stringify(params))
         params  =  vCrypto(params);
         // console.log(JSON.stringify(params))
@@ -185,10 +190,12 @@ async function addItemIfCrypto(dir,data,params){
 
 function addItem(dir,data,params =null,typeAdd = '1'){
     try{
-        params  =  params||{noParam:0}
+        params  =  tryJson(params)||{noParam:0}
+        console.log(Bases)
         Object.assign(Bases,params);
         // console.log(Bases)
         params = Bases
+        console.log(params)
         if(typeAdd.toLowerCase() == 'sync' || typeAdd =='1' || typeAdd == null){
            return addItemSync(dir,data,params).then((result)=>{
             return result
