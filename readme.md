@@ -2,7 +2,7 @@
 
 ### Sistema de acesso baseado no funcionamento de NoSQL file databases.
 
-## THIS IS ALPHA
+## THIS IS BETA
 
 ##### Feature Branch
 ##### Liberado funçoes de cryptografia
