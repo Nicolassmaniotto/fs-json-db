@@ -79,3 +79,4 @@
     }
    const typeFind= '1' // 1 regex, 2 cahve valor, 3 chave valor com cryptografia
    ```
+   [github-link](https://github.com/Nicolassmaniotto/fs-json-db)
