@@ -590,7 +590,7 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
                                 result[j].id = i*bases.qtId-bases.qtId+result[j].id
                             }
                             item = item.concat(result)
-                            console.log(item)
+                            //console.log(item)
                         }
                     }).catch(console.log)
                 }else if(typeof(findVar) != 'string'){
@@ -606,7 +606,7 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
                                 result[j].id = i*bases.qtId-bases.qtId+result[j].id
                             }
                             item = item.concat(result)
-                            console.log(item)
+                            //console.log(item)
                         }
                     }).catch(console.log)
 
@@ -647,13 +647,13 @@ async function updateDirect(dir,id,data,basesParam =null){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${calc}.jsonl`, 'utf8').split('\n');
             // como o resto vai de 0 a 9 e o array file começa em 0 se subtrai 1 para achar a linha correta
             file[resto-1] = data
-            var result = file.join("\n")
+            var result = file.join("")
             await fs.writeFile(`${bases.dir}/${dir}/${calc}.jsonl`, `${result}\n`, (err) => {
                 if (err) throw err;
             // console.log('O arquivo foi criado!');
             return 'success'
             });
-            return 'atualizado'
+            return 'success'
         // calc
         }
     }catch(err){
@@ -679,7 +679,7 @@ async function updateCrypto(dir,id,data,params =null){
         result = updateDirect(dir,id,item,params =null)
         return result;
     }catch(err){
-        return err
+        throw err
     }
 
 }
