@@ -8,6 +8,7 @@ function addItem(dir,data,params =null,typeAdd = '1'){
         Object.assign(Bases,params);
         // console.log(Bases)
         params = Bases
+        typeAdd = tryString(typeAdd)
         if(typeAdd.toLowerCase() == 'sync' || typeAdd =='1' || typeAdd == null){
            return addItemSync(dir,data,params)
         }else if(typeAdd.toLowerCase() == 'crypto' || typeAdd =='2'){

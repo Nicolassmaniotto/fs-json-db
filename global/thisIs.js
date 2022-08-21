@@ -8,3 +8,16 @@ export function tryJson(data) {
     }
 
 }
+export function tryString(data){
+    try{    
+        if(typeof(data)=='number'){
+            return `${data}`
+        }else if(typeof(data)=='string'){
+            return data
+        }else{
+            throw data
+        }
+    }catch{
+        return false
+    }
+}

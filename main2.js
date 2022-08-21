@@ -3,11 +3,7 @@
 // import {decryptoSimple} from 'encryptosumsimple'
 // const Bases = require('./bases.js')
 const fs  = require('fs')
-const encryptosumsimple = require('encryptosumsimple');
-const { param } = require('express/lib/request');
-const decryptoSimple = encryptosumsimple.decryptoSimple;
-const encryptoSimple = encryptosumsimple.encryptoSimple;
-
+const{decryptoSimple,encryptoSimple}=require('encryptosumsimple');
 
 const Bases = {
     qtId:10,
@@ -29,6 +25,19 @@ function tryJson(data) {
         return false;
     }
 
+}
+function tryString(data){
+    try{    
+        if(typeof(data)=='number'){
+            return `${data}`
+        }else if(typeof(data)=='string'){
+            return data
+        }else{
+            throw data
+        }
+    }catch{
+        return false
+    }
 }
 function vCrypto(params){
     //verifica a criptpografia
@@ -55,6 +64,8 @@ function deCrypto(data,params){
         if(typeof(params) != 'object') throw params;
         if(params.crypto.type.toLowerCase() == 'sumsymple'){
             // criptografia chave valor por soma
+            //console.log(data)
+            if(!data) return result
             data = Buffer.from(data,'base64').toString('utf8')
             result = decryptoSimple(data,params.crypto.key,params.crypto.separe )
             result = Buffer.from(data,'base64').toString('utf8')
@@ -190,12 +201,14 @@ async function addItemIfCrypto(dir,data,params){
 
 function addItem(dir,data,params =null,typeAdd = '1'){
     try{
+        //console.log('addItem')
         params  =  tryJson(params)||{noParam:0}
-        console.log(Bases)
+        // console.log(Bases)
         Object.assign(Bases,params);
+        typeAdd = tryString(typeAdd)
         // console.log(Bases)
         params = Bases
-        console.log(params)
+        //console.log(params)
         if(typeAdd.toLowerCase() == 'sync' || typeAdd =='1' || typeAdd == null){
            return addItemSync(dir,data,params).then((result)=>{
             return result
@@ -363,7 +376,7 @@ async function findItemByKey(dir,keyName,valor =1,basesParam= null){
         return err
     }
 }
-async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
+async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
 
     try{
         // console.log(dir)
@@ -379,6 +392,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
         if(!keyName.key||keyName.key == null || typeof(keyName.key)=='undefined'){
             data.key = keyName
         }
+        console.log(data.key)
         if(!data.opt){
             data.opt = 'i'
         }
@@ -386,10 +400,10 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
         var pos = 0;
         // var file;
         if(typeof(keyName) =='number'){
-            console.log(pos)
+            //console.log(pos)
             pos = (parseInt(keyName)+parseInt(bases.qtId))/bases.qtId;
             pos = parseInt(pos)
-            console.log(keyName)
+            //console.log(keyName)
             pos = pos%1;
             pos = (pos.toFixed(1))*10
             pos = parseInt(pos)
@@ -403,29 +417,22 @@ async function findItemByKeyCrypto(dir,keyName,valor =1,basesParam= null){
         var cont = 0;
         if(pos>0){
             bases.qtId = pos
-            console.log(pos)
+            //console.log(pos)
         }
         for(var i =pos;i<bases.qtId;i++){
             // adicionar função de descryptografar
             let jsonParsed = deCrypto(file[i],bases)
             jsonParsed= tryJson(jsonParsed)
             // console.log(file[i])
+            // console.log(keyName)
+            // console.log(jsonParsed)
             if(!jsonParsed) continue
-            // if(pos>0){
-            //     let data ={
-            //         id : pos,
-            //         item: jsonParsed
-            //     } 
-            //     // result[cont] .id = i+1;
-            //     result[cont++] = data
-            //     break
-            //     continue
-            // }
             if(keyName in jsonParsed){
 
                 if(valor){
                     if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
                 }
+                // console.log(jsonParsed)
                 let data ={
                     id : i+1,
                     item: jsonParsed
@@ -490,7 +497,6 @@ async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
                 }).catch(console.log)
             }
         }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
-            findItemByKeyCrypto()
         }
         return arrayReturn
     }catch(err){
@@ -499,9 +505,9 @@ async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
     }
 }
 
-async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
+async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
     basesParam  =  basesParam||{noParam:0,find:null}
-    console.log(basesParam)
+    // console.log(basesParam)
     let bases  = Bases
     
     Object.assign(bases,basesParam);
@@ -509,13 +515,15 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
 
         let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
     // console.log(pasta.length)
-
+        typeFind = tryString(typeFind)
+        // console.log(typeFind)
+        // console.log(bases)
         let  item=[];
         var cont =0;
         if(typeFind.toLowerCase() == 'regex' || typeFind =='1' || typeFind == null){
             if(typeof(findVar) =='number' || bases.id){
                 var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
-                console.log(calc)
+                // console.log(calc)
                 var file = fs.readFileSync(`${bases.dir}/${dir}/${parseInt(calc)}.jsonl`, 'utf8').split('\n');
                 calc = calc%1;
                 calc = (calc.toFixed(1))*10
@@ -537,18 +545,32 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
         }else if(typeFind.toLowerCase() == 'key'|| typeFind == '2'){
             // console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
-                await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
-                    // console.log(result)
-                    if(result!=0){
-                        // result.id = i*bases.qtId-bases.qtId+result.id
-                        for(let j in result){
-                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                if(typeof(findVar) == 'string'){
+                    await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                        // console.log(result)
+                        if(result!=0){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
                         }
-                        item = item.concat(result)
-                    }
-                }).catch(console.log)
+                    }).catch(console.log)
+                }else if(typeof(findVar) == 'object'){
+                    await findItemByKey(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
+                        // console.log(result)
+                        if(result!=0){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
+                        }
+                    }).catch(console.log)
+                }
+
                 if(item.length>= bases.findQt && bases.findQt != null){
-                    console.log(bases.findQt )
+                    // console.log(bases.findQt )
                     break
                 }
             }
@@ -557,21 +579,40 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
             let comprimento =(typeof(findVar)== 'number')?((parseInt(findVar)+parseInt(bases.qtId))/bases.qtId)+1: pasta.length
            
             for(var i =pos; i<= comprimento; i++){
-                await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
-                    //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
-                    // console.log(result)
-                    if(result!=0 && result!=null && tryJson(result)){
-                        // result.id = i*bases.qtId-bases.qtId+result.id
-                        console.log(result)
-                        for(let j in result){
-                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                if(typeof(findVar) == 'string'){
+                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                        // console.log(result)
+                        if(result!=0 && result!=null && tryJson(result)){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            // console.log(result)
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
+                            console.log(item)
                         }
-                        item = item.concat(result)
-                        console.log(item)
-                    }
-                }).catch(console.log)
+                    }).catch(console.log)
+                }else if(typeof(findVar) != 'string'){
+                    // console.log(findVar)
+                    // console.log(findVar.keyname)
+                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
+                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                        // console.log(result)
+                        if(result!=0 && result!=null && tryJson(result)){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            // console.log(result)
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
+                            console.log(item)
+                        }
+                    }).catch(console.log)
+
+                }
                 if(item.length>= bases.findQt && bases.findQt != null){
-                    console.log(bases.findQt )
+                    // console.log(bases.findQt )
                     break
                 }
             }
