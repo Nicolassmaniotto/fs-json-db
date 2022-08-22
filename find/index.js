@@ -60,9 +60,10 @@ async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
     }
 }
 
-async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
+
+async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
     basesParam  =  basesParam||{noParam:0,find:null}
-    console.log(basesParam)
+    // console.log(basesParam)
     let bases  = Bases
     
     Object.assign(bases,basesParam);
@@ -70,13 +71,15 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
 
         let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
     // console.log(pasta.length)
-
+        typeFind = tryString(typeFind)
+        // console.log(typeFind)
+        // console.log(bases)
         let  item=[];
         var cont =0;
         if(typeFind.toLowerCase() == 'regex' || typeFind =='1' || typeFind == null){
             if(typeof(findVar) =='number' || bases.id){
                 var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
-                console.log(calc)
+                // console.log(calc)
                 var file = fs.readFileSync(`${bases.dir}/${dir}/${parseInt(calc)}.jsonl`, 'utf8').split('\n');
                 calc = calc%1;
                 calc = (calc.toFixed(1))*10
@@ -98,18 +101,32 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
         }else if(typeFind.toLowerCase() == 'key'|| typeFind == '2'){
             // console.log('passou aqui')
             for(var i =1; i<= pasta.length; i++){
-                await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
-                    // console.log(result)
-                    if(result!=0){
-                        // result.id = i*bases.qtId-bases.qtId+result.id
-                        for(let j in result){
-                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                if(typeof(findVar) == 'string'){
+                    await findItemByKey(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                        // console.log(result)
+                        if(result!=0){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
                         }
-                        item = item.concat(result)
-                    }
-                }).catch(console.log)
+                    }).catch(console.log)
+                }else if(typeof(findVar) == 'object'){
+                    await findItemByKey(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
+                        // console.log(result)
+                        if(result!=0){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
+                        }
+                    }).catch(console.log)
+                }
+
                 if(item.length>= bases.findQt && bases.findQt != null){
-                    console.log(bases.findQt )
+                    // console.log(bases.findQt )
                     break
                 }
             }
@@ -118,21 +135,40 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = 1){
             let comprimento =(typeof(findVar)== 'number')?((parseInt(findVar)+parseInt(bases.qtId))/bases.qtId)+1: pasta.length
            
             for(var i =pos; i<= comprimento; i++){
-                await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
-                    //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
-                    // console.log(result)
-                    if(result!=0 && result!=null && tryJson(result)){
-                        // result.id = i*bases.qtId-bases.qtId+result.id
-                        console.log(result)
-                        for(let j in result){
-                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                if(typeof(findVar) == 'string'){
+                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                        // console.log(result)
+                        if(result!=0 && result!=null && tryJson(result)){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            // console.log(result)
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
+                            //console.log(item)
                         }
-                        item = item.concat(result)
-                        console.log(item)
-                    }
-                }).catch(console.log)
+                    }).catch(console.log)
+                }else if(typeof(findVar) != 'string'){
+                    // console.log(findVar)
+                    // console.log(findVar.keyname)
+                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
+                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                        // console.log(result)
+                        if(result!=0 && result!=null && tryJson(result)){
+                            // result.id = i*bases.qtId-bases.qtId+result.id
+                            // console.log(result)
+                            for(let j in result){
+                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            }
+                            item = item.concat(result)
+                            //console.log(item)
+                        }
+                    }).catch(console.log)
+
+                }
                 if(item.length>= bases.findQt && bases.findQt != null){
-                    console.log(bases.findQt )
+                    // console.log(bases.findQt )
                     break
                 }
             }

@@ -392,7 +392,11 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
         if(!keyName.key||keyName.key == null || typeof(keyName.key)=='undefined'){
             data.key = keyName
         }
-        console.log(data.key)
+        if( typeof(keyName)=='object'&& keyName.key){
+            valor = keyname.value;
+            keyname = keyname.key
+        }
+        // console.log(data.key)
         if(!data.opt){
             data.opt = 'i'
         }
@@ -401,6 +405,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
         // var file;
         if(typeof(keyName) =='number'){
             //console.log(pos)
+            //22/08/2022
             pos = (parseInt(keyName)+parseInt(bases.qtId))/bases.qtId;
             pos = parseInt(pos)
             //console.log(keyName)
@@ -415,34 +420,42 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
         var file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
         var result = []
         var cont = 0;
-        if(pos>0){
+        if(!isNaN(keyName)){
             bases.qtId = pos
+            console.log(pos)
+            let data ={
+                id : pos,
+                item:  deCrypto(file[pos],bases)
+            } 
+            // result[cont] .id = i+1;
+            result[cont++] = data
             //console.log(pos)
-        }
-        for(var i =pos;i<bases.qtId;i++){
-            // adicionar função de descryptografar
-            let jsonParsed = deCrypto(file[i],bases)
-            jsonParsed= tryJson(jsonParsed)
-            // console.log(file[i])
-            // console.log(keyName)
-            // console.log(jsonParsed)
-            if(!jsonParsed) continue
-            if(keyName in jsonParsed){
-
-                if(valor){
-                    if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
-                }
+        }else{
+            for(var i =0;i<bases.qtId;i++){
+                // adicionar função de descryptografar
+                let jsonParsed = deCrypto(file[i],bases)
+                jsonParsed= tryJson(jsonParsed)
+                // console.log(file[i])
+                // console.log(keyName)
                 // console.log(jsonParsed)
-                let data ={
-                    id : i+1,
-                    item: jsonParsed
-                } 
-                // result[cont] .id = i+1;
-                result[cont++] = data
-                if(bases.findQt && cont>=bases.findQt && bases.findQt != null){
-                    break
-                }
+                if(!jsonParsed) continue
+                if(keyName in jsonParsed){
 
+                    if(valor){
+                        if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
+                    }
+                    // console.log(jsonParsed)
+                    let data ={
+                        id : i+1,
+                        item: jsonParsed
+                    } 
+                    // result[cont] .id = i+1;
+                    result[cont++] = data
+                    if(bases.findQt && cont>=bases.findQt && bases.findQt != null){
+                        break
+                    }
+
+                }
             }
         }
         return result
@@ -515,7 +528,11 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
 
         let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
     // console.log(pasta.length)
-        typeFind = tryString(typeFind)
+        if(typeof(findVar) == 'number'){
+            //correção devido a  escolha de usar 1 como id inicial
+            findVar = typeFind-1
+        }
+            typeFind = tryString(typeFind)
         // console.log(typeFind)
         // console.log(bases)
         let  item=[];
@@ -575,48 +592,71 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
                 }
             }
         }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
-            let pos = (typeof(findVar)!= 'number')?1:findVar
-            let comprimento =(typeof(findVar)== 'number')?((parseInt(findVar)+parseInt(bases.qtId))/bases.qtId)+1: pasta.length
-           
-            for(var i =pos; i<= comprimento; i++){
-                if(typeof(findVar) == 'string'){
-                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
-                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+            if(typeof(findVar) =='number' || bases.id){
+                var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
+                // console.log(calc)
+                let file = Math.floor(calc)
+                // console.log(Math.floor(calc))
+                // var file = fs.readFileSync(`${bases.dir}/${dir}/${Math.floor(calc)}.jsonl`, 'utf8').split('\n');
+                // calc = calc%1;
+                // calc = (calc.toFixed(1))*10
+                //22/08/2022
+                // console.log(calc)
+                await findItemByKeyCrypto(`${dir}/${Math.floor(calc)}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                    //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                    if(result!=0 && result!=null && tryJson(result)){
+                        // result.id = i*bases.qtId-bases.qtId+result.id
                         // console.log(result)
-                        if(result!=0 && result!=null && tryJson(result)){
-                            // result.id = i*bases.qtId-bases.qtId+result.id
-                            // console.log(result)
-                            for(let j in result){
-                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
-                            }
-                            item = item.concat(result)
-                            //console.log(item)
+                        for(let j in result){
+                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
                         }
-                    }).catch(console.log)
-                }else if(typeof(findVar) != 'string'){
-                    // console.log(findVar)
-                    // console.log(findVar.keyname)
-                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
-                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
-                        // console.log(result)
-                        if(result!=0 && result!=null && tryJson(result)){
-                            // result.id = i*bases.qtId-bases.qtId+result.id
+                        item = item.concat(result)
+                        //console.log(item)
+                    }
+                }).catch(console.log)
+                // return file[calc]
+                // throw calc
+            }else{
+                for(var i =pos; i<= comprimento; i++){
+                    if(typeof(findVar) == 'string'){
+                        await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                            //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
                             // console.log(result)
-                            for(let j in result){
-                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                            if(result!=0 && result!=null && tryJson(result)){
+                                // result.id = i*bases.qtId-bases.qtId+result.id
+                                // console.log(result)
+                                for(let j in result){
+                                    result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                                }
+                                item = item.concat(result)
+                                //console.log(item)
                             }
-                            item = item.concat(result)
-                            //console.log(item)
-                        }
-                    }).catch(console.log)
+                        }).catch(console.log)
+                    }else if(typeof(findVar) == 'object'){
+                        // console.log(findVar)
+                        // console.log(findVar.keyname)
+                        await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
+                            //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                            // console.log(result)
+                            if(result!=0 && result!=null && tryJson(result)){
+                                // result.id = i*bases.qtId-bases.qtId+result.id
+                                // console.log(result)
+                                for(let j in result){
+                                    result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                                }
+                                item = item.concat(result)
+                                //console.log(item)
+                            }
+                        }).catch(console.log)
 
-                }
-                if(item.length>= bases.findQt && bases.findQt != null){
-                    // console.log(bases.findQt )
-                    break
+                    }
+                    if(item.length>= bases.findQt && bases.findQt != null){
+                        // console.log(bases.findQt )
+                        break
+                    }
                 }
             }
-        }
+    }
         return item
     }catch(err){
         // console.log('erro')
@@ -635,25 +675,25 @@ async function updateDirect(dir,id,data,basesParam =null){
         var calc;
         if(pasta.length==0){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
-            console.log(file[id])
+            // console.log(file[id])
             return 'if 1'
         }else{
             var calc = parseInt((bases.qtId+id)/bases.qtId)
             if(calc>pasta.length) throw calc
-            console.log(calc)
+            // console.log(calc)
             var resto = parseFloat((((bases.qtId+id)/bases.qtId)%1).toFixed(1))*10
-            console.log(resto)
+            // console.log(resto)
             // calc = calc -id
             var file = fs.readFileSync(`${bases.dir}/${dir}/${calc}.jsonl`, 'utf8').split('\n');
             // como o resto vai de 0 a 9 e o array file começa em 0 se subtrai 1 para achar a linha correta
             file[resto-1] = data
-            var result = file.join("")
+            var result = file.join("\n")
             await fs.writeFile(`${bases.dir}/${dir}/${calc}.jsonl`, `${result}\n`, (err) => {
                 if (err) throw err;
             // console.log('O arquivo foi criado!');
             return 'success'
             });
-            return 'success'
+            return 'atualizado'
         // calc
         }
     }catch(err){
@@ -679,10 +719,11 @@ async function updateCrypto(dir,id,data,params =null){
         result = updateDirect(dir,id,item,params =null)
         return result;
     }catch(err){
-        throw err
+        return err
     }
 
 }
+
 async function update(dir,id,data,params =null,typeAdd = '1'){
     try{
         typeAdd = (typeof(typeAdd)!='string')? `${typeAdd}`:typeAdd
@@ -694,7 +735,7 @@ async function update(dir,id,data,params =null,typeAdd = '1'){
            return updateDirect(dir,id,data,params =null)
         }else if(typeAdd.toLowerCase() == 'crypto' || typeAdd =='2'){
         //    return addItemIfCrypto(dir,data,params)
-        console.log('cry')
+        // console.log('cry')
            return  updateCrypto(dir,id,data,params =null)
         }
     }catch(err){
