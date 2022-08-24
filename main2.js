@@ -537,6 +537,8 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
         // console.log(bases)
         let  item=[];
         var cont =0;
+        var pos = 1;
+        var comprimento = pasta.length;
         if(typeFind.toLowerCase() == 'regex' || typeFind =='1' || typeFind == null){
             if(typeof(findVar) =='number' || bases.id){
                 var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
