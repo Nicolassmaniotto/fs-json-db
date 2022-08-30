@@ -460,7 +460,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
         }
         return result
     }catch(err){
-        return err
+        throw err
     }
 }
 
@@ -594,10 +594,11 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
                 }
             }
         }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
-            if(typeof(findVar) =='number' || bases.id){
+            if(typeof(findVar) =='number'|| !isNaN(findVar)){
                 var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
                 // console.log(calc)
                 let file = Math.floor(calc)
+
                 // console.log(Math.floor(calc))
                 // var file = fs.readFileSync(`${bases.dir}/${dir}/${Math.floor(calc)}.jsonl`, 'utf8').split('\n');
                 // calc = calc%1;
@@ -755,7 +756,7 @@ async function teste(){
     
         // console.log(argv)
         // if(argv[2] == 'create' || argv[1] == 'create'){
-            createDB('teste').then(console.log).catch(console.log)
+            // createDB('teste').then(console.log).catch(console.log)
         // }else if(argv[2] == 'add' || argv[1] == '(e) add'){
         //     addItem('teste',JSON.stringify(dataJson)).then(console.log).catch(console.log);
         // }else if(argv[2] == 'find' || argv[1] == 'find'){
@@ -768,7 +769,7 @@ async function teste(){
             erros:["erro","contem","errou"]
         }
         // console.log(i)
-        addItem('teste',JSON.stringify(dataJson),null,'2').then(console.log).catch(console.log)
+        // addItem('teste',JSON.stringify(dataJson),null,'2').then(console.log).catch(console.log)
     }
     let bases = {
         findQt : 1,
@@ -782,7 +783,7 @@ async function teste(){
         nome:"unamed",
         algo:['algo','2','5']
     }
-    update('teste',5,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
+    // update('teste',5,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
 }
 
 teste()
