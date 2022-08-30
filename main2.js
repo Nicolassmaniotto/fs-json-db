@@ -519,8 +519,12 @@ async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
 }
 
 async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
-    basesParam  =  basesParam||{noParam:0,find:null}
+    
     // console.log(basesParam)
+    if(typeof(basesParam) == 'string'){
+        basesParam = { find:basesParam}
+    }
+    basesParam  =  basesParam||{noParam:0,find:null}
     let bases  = Bases
     
     Object.assign(bases,basesParam);
@@ -776,7 +780,7 @@ async function teste(){
         find: '11',
         id:'50'
     }
-    await findItemInAll('teste','user',bases,'3').then(console.table).catch(console.log)
+    await findItemInAll('teste','user','11','3').then(console.table).catch(console.log)
     // createDB('teste').then(console.log).catch(console.log)l
     let jsonVar = {
         user:"usuario",
@@ -786,5 +790,6 @@ async function teste(){
     // update('teste',5,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
 }
 
-teste()
-// module.exports = {createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto}
+//teste()/*
+ module.exports = {createDB,update,addItem,addItemSync,findIdInAll,findItemInAll,addItemIfCrypto}
+/**/
