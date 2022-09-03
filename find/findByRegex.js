@@ -86,5 +86,4 @@ async function findItem(dir,regexData,basesParam= null){
 
 
 
-
 export {findId,findItem}

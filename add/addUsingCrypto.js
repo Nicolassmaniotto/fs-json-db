@@ -6,12 +6,12 @@ import {vCrypto} from '../crypto/verify.js'
 async function addItemIfCrypto(dir,data,params){
     try{
         // console.log(JSON.stringify(params))
-        // let result;
+        let result;
         // params  =  params||{noParam:0}
         // let bases  = Bases
         // Object.assign(params,bases);
-        // // console.log(JSON.stringify(params))
-        // params  =  vCrypto(params);
+        // console.log(JSON.stringify(params))
+        params  =  vCrypto(params);
         // console.log(JSON.stringify(params))
         if(typeof(params)=='string') throw params;
 
@@ -19,7 +19,9 @@ async function addItemIfCrypto(dir,data,params){
             data = JSON.stringify(data);
         }
         let item = enCrypto(data,params)
-        result = addItemSync(dir,item,params)
+        result = addItemSync(dir,item,params).then((result)=>{return result}).catch((err)=>{if(err)throw err} )
+        
+        
         return result;
     }catch(err){
         throw err

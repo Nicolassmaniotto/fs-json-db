@@ -40,6 +40,9 @@ async function findIdByKey(dir,keyName,valor =null,basesParam= null){
 async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
 
     try{
+        // console.log(dir)
+        // console.log(keyName)
+        // console.log(valor)
         basesParam  =  basesParam||{noParam:0}
         let bases  = Bases
         Object.assign(bases,basesParam);
@@ -50,7 +53,11 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
         if(!keyName.key||keyName.key == null || typeof(keyName.key)=='undefined'){
             data.key = keyName
         }
-        console.log(data.key)
+        if( typeof(keyName)=='object'&& keyName.key){
+            valor = keyname.value;
+            keyname = keyname.key
+        }
+        // console.log(data.key)
         if(!data.opt){
             data.opt = 'i'
         }
@@ -59,6 +66,7 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
         // var file;
         if(typeof(keyName) =='number'){
             //console.log(pos)
+            //22/08/2022
             pos = (parseInt(keyName)+parseInt(bases.qtId))/bases.qtId;
             pos = parseInt(pos)
             //console.log(keyName)
@@ -69,42 +77,51 @@ async function findItemByKeyCrypto(dir,keyName,valor =null,basesParam= null){
             // return file[calc]
             // throw calc
         }
+
         var file = fs.readFileSync(`${bases.dir}/${dir}`, 'utf8').split('\n');
         var result = []
         var cont = 0;
-        if(pos>0){
+        if(!isNaN(keyName)){
             bases.qtId = pos
+            console.log(pos)
+            let data ={
+                id : pos,
+                item:  deCrypto(file[pos],bases)
+            } 
+            // result[cont] .id = i+1;
+            result[cont++] = data
             //console.log(pos)
-        }
-        for(var i =pos;i<bases.qtId;i++){
-            // adicionar função de descryptografar
-            let jsonParsed = deCrypto(file[i],bases)
-            jsonParsed= tryJson(jsonParsed)
-            // console.log(file[i])
-            // console.log(keyName)
-            // console.log(jsonParsed)
-            if(!jsonParsed) continue
-            if(keyName in jsonParsed){
-
-                if(valor){
-                    if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
-                }
+        }else{
+            for(var i =0;i<bases.qtId;i++){
+                // adicionar função de descryptografar
+                let jsonParsed = deCrypto(file[i],bases)
+                jsonParsed= tryJson(jsonParsed)
+                // console.log(file[i])
+                // console.log(keyName)
                 // console.log(jsonParsed)
-                let data ={
-                    id : i+1,
-                    item: jsonParsed
-                } 
-                // result[cont] .id = i+1;
-                result[cont++] = data
-                if(bases.findQt && cont>=bases.findQt && bases.findQt != null){
-                    break
-                }
+                if(!jsonParsed) continue
+                if(keyName in jsonParsed){
 
+                    if(valor){
+                        if(jsonParsed[keyName] != valor || jsonParsed == null) continue;
+                    }
+                    // console.log(jsonParsed)
+                    let data ={
+                        id : i+1,
+                        item: jsonParsed
+                    } 
+                    // result[cont] .id = i+1;
+                    result[cont++] = data
+                    if(bases.findQt && cont>=bases.findQt && bases.findQt != null){
+                        break
+                    }
+
+                }
             }
         }
         return result
     }catch(err){
-        return err
+        throw err
     }
 }
 export {findItemByKeyCrypto}

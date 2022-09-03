@@ -51,7 +51,6 @@ async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
                 }).catch(console.log)
             }
         }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
-            findItemByKeyCrypto()
         }
         return arrayReturn
     }catch(err){
@@ -62,8 +61,12 @@ async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
 
 
 async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
-    basesParam  =  basesParam||{noParam:0,find:null}
+    
     // console.log(basesParam)
+    if(typeof(basesParam) == 'string'){
+        basesParam = { find:basesParam}
+    }
+    basesParam  =  basesParam||{noParam:0,find:null}
     let bases  = Bases
     
     Object.assign(bases,basesParam);
@@ -71,11 +74,17 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
 
         let pasta = fs.readdirSync(`${bases.dir}/${dir}`);
     // console.log(pasta.length)
-        typeFind = tryString(typeFind)
+        if(typeof(findVar) == 'number'){
+            //correção devido a  escolha de usar 1 como id inicial
+            findVar = typeFind-1
+        }
+            typeFind = tryString(typeFind)
         // console.log(typeFind)
         // console.log(bases)
         let  item=[];
         var cont =0;
+        var pos = 1;
+        var comprimento = pasta.length;
         if(typeFind.toLowerCase() == 'regex' || typeFind =='1' || typeFind == null){
             if(typeof(findVar) =='number' || bases.id){
                 var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
@@ -131,48 +140,72 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
                 }
             }
         }else if(typeFind.toLowerCase() == 'keycripto'|| typeFind == '3'){
-            let pos = (typeof(findVar)!= 'number')?1:findVar
-            let comprimento =(typeof(findVar)== 'number')?((parseInt(findVar)+parseInt(bases.qtId))/bases.qtId)+1: pasta.length
-           
-            for(var i =pos; i<= comprimento; i++){
-                if(typeof(findVar) == 'string'){
-                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
-                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
-                        // console.log(result)
-                        if(result!=0 && result!=null && tryJson(result)){
-                            // result.id = i*bases.qtId-bases.qtId+result.id
-                            // console.log(result)
-                            for(let j in result){
-                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
-                            }
-                            item = item.concat(result)
-                            //console.log(item)
-                        }
-                    }).catch(console.log)
-                }else if(typeof(findVar) != 'string'){
-                    // console.log(findVar)
-                    // console.log(findVar.keyname)
-                    await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
-                        //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
-                        // console.log(result)
-                        if(result!=0 && result!=null && tryJson(result)){
-                            // result.id = i*bases.qtId-bases.qtId+result.id
-                            // console.log(result)
-                            for(let j in result){
-                                result[j].id = i*bases.qtId-bases.qtId+result[j].id
-                            }
-                            item = item.concat(result)
-                            //console.log(item)
-                        }
-                    }).catch(console.log)
+            if(typeof(findVar) =='number'|| !isNaN(findVar)){
+                var calc = (parseInt(findVar)+parseInt(bases.qtId))/bases.qtId;
+                // console.log(calc)
+                let file = Math.floor(calc)
 
-                }
-                if(item.length>= bases.findQt && bases.findQt != null){
-                    // console.log(bases.findQt )
-                    break
+                // console.log(Math.floor(calc))
+                // var file = fs.readFileSync(`${bases.dir}/${dir}/${Math.floor(calc)}.jsonl`, 'utf8').split('\n');
+                // calc = calc%1;
+                // calc = (calc.toFixed(1))*10
+                //22/08/2022
+                // console.log(calc)
+                await findItemByKeyCrypto(`${dir}/${Math.floor(calc)}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                    //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                    if(result!=0 && result!=null && tryJson(result)){
+                        // result.id = i*bases.qtId-bases.qtId+result.id
+                        // console.log(result)
+                        for(let j in result){
+                            result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                        }
+                        item = item.concat(result)
+                        //console.log(item)
+                    }
+                }).catch(console.log)
+                // return file[calc]
+                // throw calc
+            }else{
+                for(var i =pos; i<= comprimento; i++){
+                    if(typeof(findVar) == 'string'){
+                        await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar,bases.find,bases).then((result)=>{
+                            //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                            // console.log(result)
+                            if(result!=0 && result!=null && tryJson(result)){
+                                // result.id = i*bases.qtId-bases.qtId+result.id
+                                // console.log(result)
+                                for(let j in result){
+                                    result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                                }
+                                item = item.concat(result)
+                                //console.log(item)
+                            }
+                        }).catch(console.log)
+                    }else if(typeof(findVar) == 'object'){
+                        // console.log(findVar)
+                        // console.log(findVar.keyname)
+                        await findItemByKeyCrypto(`${dir}/${i}.jsonl` ,findVar.keyname,findVar.value,bases).then((result)=>{
+                            //dir == pasta dos dados ; i == arquivo ; findVar == chave a ser procurada ;  bases.find = valor a ser procurado; bases == parametros de controle 
+                            // console.log(result)
+                            if(result!=0 && result!=null && tryJson(result)){
+                                // result.id = i*bases.qtId-bases.qtId+result.id
+                                // console.log(result)
+                                for(let j in result){
+                                    result[j].id = i*bases.qtId-bases.qtId+result[j].id
+                                }
+                                item = item.concat(result)
+                                //console.log(item)
+                            }
+                        }).catch(console.log)
+
+                    }
+                    if(item.length>= bases.findQt && bases.findQt != null){
+                        // console.log(bases.findQt )
+                        break
+                    }
                 }
             }
-        }
+    }
         return item
     }catch(err){
         // console.log('erro')
