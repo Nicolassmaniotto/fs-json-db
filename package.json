@@ -1,12 +1,12 @@
 {
   "name": "fs-json-db",
-  "version": "0.0.9",
+  "version": "0.1.10.7",
   "description": "DB baseado em pasta, e JSON, usando FS principalmente como base.",
-  "main": "main.js",
-  "type": "module",
+  "main": "main2.js",
+  "type": "commonjs",
   "scripts": {
     "test": "clear && node main.js",
-    "start": "npm test"
+    "start": "clear && node main2.js"
   },
   "keywords": [
     "DB",
