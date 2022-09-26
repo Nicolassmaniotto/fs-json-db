@@ -11,14 +11,14 @@ async function updateDirect(dir,id,data,basesParam =null){
         var calc;
         if(pasta.length==0){
             var file = fs.readFileSync(`${bases.dir}/${dir}/${1}.jsonl`, 'utf8').split('\n');
-            console.log(file[id])
+            // console.log(file[id])
             return 'if 1'
         }else{
             var calc = parseInt((bases.qtId+id)/bases.qtId)
             if(calc>pasta.length) throw calc
-            console.log(calc)
+            // console.log(calc)
             var resto = parseFloat((((bases.qtId+id)/bases.qtId)%1).toFixed(1))*10
-            console.log(resto)
+            // console.log(resto)
             // calc = calc -id
             var file = fs.readFileSync(`${bases.dir}/${dir}/${calc}.jsonl`, 'utf8').split('\n');
             // como o resto vai de 0 a 9 e o array file começa em 0 se subtrai 1 para achar a linha correta

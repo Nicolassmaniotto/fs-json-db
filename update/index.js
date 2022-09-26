@@ -12,7 +12,7 @@ async function update(dir,id,data,params =null,typeAdd = '1'){
            return updateDirect(dir,id,data,params =null)
         }else if(typeAdd.toLowerCase() == 'crypto' || typeAdd =='2'){
         //    return addItemIfCrypto(dir,data,params)
-        console.log('cry')
+        // console.log('cry')
            return  updateCrypto(dir,id,data,params =null)
         }
     }catch(err){

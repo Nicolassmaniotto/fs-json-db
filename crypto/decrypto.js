@@ -10,6 +10,8 @@ function deCrypto(data,params){
         if(typeof(params) != 'object') throw params;
         if(params.crypto.type.toLowerCase() == 'sumsymple'){
             // criptografia chave valor por soma
+            //console.log(data)
+            if(!data) return result
             data = Buffer.from(data,'base64').toString('utf8')
             result = decryptoSimple(data,params.crypto.key,params.crypto.separe )
             result = Buffer.from(data,'base64').toString('utf8')

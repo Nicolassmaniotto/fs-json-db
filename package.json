@@ -3,7 +3,7 @@
   "version": "0.1.10.7",
   "description": "DB baseado em pasta, e JSON, usando FS principalmente como base.",
   "main": "main2.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "test": "clear && node main.js",
     "start": "clear && node main2.js"

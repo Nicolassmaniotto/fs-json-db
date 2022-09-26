@@ -1,6 +1,5 @@
 import {readMakeDir} from '../global/reader.js'
-
-async function createDB(name,basesParam=null){
+export async function createDB(name,basesParam=null){
     // cria o banco 
     basesParam  =  basesParam||{noParam:0}
     let bases  = Bases

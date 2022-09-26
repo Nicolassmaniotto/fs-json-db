@@ -214,4 +214,5 @@ async function findItemInAll(dir,findVar,basesParam =null,typeFind = '1'){
     }
 }
 
+
 export {findIdInAll,findItemInAll}
