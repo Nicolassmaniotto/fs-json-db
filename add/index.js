@@ -1,7 +1,7 @@
 import {addItemAsync,addItemSync} from './addDirect.js'
 import { addItemIfCrypto } from './addUsingCrypto.js'
 import {Bases} from '../bases.js'
-
+import {tryJson, tryString} from "../global/thisIs.js"
 async function addItem(dir,data,params =null,typeAdd = '1'){
     try{
         //console.log('addItem')

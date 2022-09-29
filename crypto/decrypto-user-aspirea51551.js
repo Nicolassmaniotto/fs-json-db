@@ -16,6 +16,11 @@ function deCrypto(data,params){
             result = decryptoSimple(data,params.crypto.key,params.crypto.separe )
             result = Buffer.from(result,'base64').toString('utf8')
         }
+        if(params.crypto.type.toLowerCase() == 'aes-256-cbc'){
+            let decipher = crypto.createDecipheriv('aes-256-cbc', params.crypto.key, params.crypto.iv);
+            decipher.update(data, 'base64', 'utf8');
+            result + decipher.final('utf8')
+        }
         return result
     }catch(err){
         return err

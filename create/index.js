@@ -1,4 +1,6 @@
 import {readMakeDir} from '../global/reader.js'
+import {Bases} from '../bases.js'
+import {existsSync} from 'fs'
 export async function createDB(name,basesParam=null){
     // cria o banco 
     basesParam  =  basesParam||{noParam:0}
@@ -6,7 +8,7 @@ export async function createDB(name,basesParam=null){
     Object.assign(bases,basesParam);
     try{
         if(!name) throw 'Sem nome para a Tabela'
-        if(fs.existsSync(`${bases.dir}/${name}`)) throw 'erro BD ja exist'
+        if(existsSync(`${bases.dir}/${name}`)) throw 'erro BD ja exist'
         if(!readMakeDir(`${bases.dir}/${name}`)) throw 'Erro ao criar'
         return 'Sucesso'
     }catch(err){

@@ -4,6 +4,7 @@ export const Bases = {
     findQt : null,
     crypto:{
         type:'sumsymple',
-        key:'isso_é_uma_senha'
+        key:'senhasenhasenha'
+        // iv:"algo_a_mais"
     }
 }

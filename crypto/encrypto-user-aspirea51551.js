@@ -15,6 +15,11 @@ function enCrypto(data,params){
             result = Buffer.from(result,'utf8').toString('base64')
             //  =  addItemSync(dir,item,params)
         }
+        if(params.crypto.type.toLowerCase() == 'aes-256-cbc'){
+            data = crypto.createCipheriv('aes-256-cbc', params.crypto.key, params.crypto.iv);
+            let encrypted = cipher.update(val, 'utf8', 'base64');
+            encrypted += cipher.final('base64');
+        }
         return result
     }catch(err){
         return err

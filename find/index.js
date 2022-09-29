@@ -3,7 +3,8 @@ import {Bases} from '../bases.js'
 import {findId,findItem} from './findByRegex.js'
 import { findIdByKey,findItemByKey } from './findBykey.js'
 import { findItemByKeyCrypto } from './findBykeyCrypto.js'
-import { tryJson } from '../global/thisIs.js'
+import { tryJson,tryString } from '../global/thisIs.js'
+
 import * as fs from 'fs'
 async function findIdInAll(dir,findVar,basesParam =null,typeFind = '1'){
     basesParam  =  basesParam||{noParam:0}

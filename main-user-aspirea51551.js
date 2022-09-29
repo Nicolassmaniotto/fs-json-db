@@ -43,33 +43,31 @@ async function teste(){
     
     
     // /*
-    console.time()
-    for(let i =0;i<=1000;i++){
+
+    
+    for(let i =0;i<=1;i++){
         let dataJson = {
             user:i,
             erros:["erro","contem","errou"],
             teste:'testé'
         }
         // console.log(i)
-        addItem('teste',JSON.stringify(dataJson),null,'2').then().catch(console.log)
+        addItem('teste',JSON.stringify(dataJson),null,'2').then(console.log).catch(console.log)
     }
-    console.timeEnd()
     // /*
     let bases = {
         findQt : 1,
-        find: '110',
+        find: '11',
+        id:'50'
     }
-    console.time()
-    // await findItemInAll('teste','user','2','3').then(console.table).catch(console.log)
-    await findItemInAll('teste','user',bases,'3').then((result)=>console.table(result[0])).catch(console.log)
-    console.timeEnd()
+    await findItemInAll('teste','teste','testé','3').then(console.table).catch(console.log)
     // createDB('teste').then(console.log).catch(console.log)l
     let jsonVar = {
         user:"11",
         nome:"unamed",
         algo:['algo','2','5']
     }
-    update('teste',2,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
+    update('teste',7,JSON.stringify(jsonVar),null,'2').then(console.log).catch(console.log)
     /**/
 }
 
