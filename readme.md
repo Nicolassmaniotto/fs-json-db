@@ -79,4 +79,6 @@
     }
    const typeFind= '1' // 1 regex, 2 cahve valor, 3 chave valor com cryptografia
    ```
-   [github-link](https://github.com/Nicolassmaniotto/fs-json-db)
+   ### [github-link](https://github.com/Nicolassmaniotto/fs-json-db)
+   #### [Github do Criador](https://github.com/Nicolassmaniotto)
+   #### [Whatsapp: 55 51 999040870](https://api.whatsapp.com/send/?phone=5551999040870&text=ola&type=phone_number&app_absent=0)

@@ -2,25 +2,18 @@ import {addItemSync} from './addDirect.js'
 import {Bases} from '../bases.js'
 import { enCrypto } from '../crypto/encrypto.js'
 import {vCrypto} from '../crypto/verify.js'
-
+import {forceString} from '../global/thisIs.js'
 async function addItemIfCrypto(dir,data,params){
     try{
-        // console.log(JSON.stringify(params))
-        let result;
-        // params  =  params||{noParam:0}
-        // let bases  = Bases
-        // Object.assign(params,bases);
-        // console.log(JSON.stringify(params))
         params  =  vCrypto(params);
-        // console.log(JSON.stringify(params))
-        if(typeof(params)=='string') throw params;
 
+        if(typeof(params)=='string') throw params;
         if(typeof(data) != 'string'){
-            data = JSON.stringify(data);
+            data = forceString(data);
         }
+
         let item = enCrypto(data,params)
-        result = addItemSync(dir,item,params).then((result)=>{return result}).catch((err)=>{if(err)throw err} )
-        
+        letresult = addItemSync(dir,item,params).then((result)=>{return result}).catch((err)=>{if(err)throw err} )
         
         return result;
     }catch(err){

@@ -21,3 +21,20 @@ export function tryString(data){
         return false
     }
 }
+export function forceString(data){
+    try{    
+        if(typeof(data)=='number'){
+            return `${data}`
+        }else if(typeof(data)=='string'){
+            return data
+        }else if(typeof(data)=='undefined'){
+            return false
+        }else if(typeof(data)==='object'){
+            return JSON.stringify(data)
+        }else{
+            return false
+        }
+    }catch{
+        return false
+    }
+}
