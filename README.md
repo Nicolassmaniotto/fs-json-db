@@ -48,15 +48,13 @@
    ``` 
 * ```js 
    addItem(DBname,data,params,typeAdd) // mudado para adicionar mais opções pela mesma função
-
+   addItem(DBname,()=>{
+      return "algo"
+   },)
    const params = { // exemplo de variavel params
         qtId:10, // quantidade de items salvo por vez
         dir:'./data/DB', // diretorio de armazenamento e busca
         findQt : null,// quatidade de items a ser buscado por vez, null == todos
-        crypto:{ // nescessario apenas se usar crypto
-            type:'sumsymple',//tipo de cryptografia
-            key:'isso_é_uma_senha'//senha
-        }
     }
    const typeAdd = '1' // 1 sincrono; 2 Crypto
    ``` 

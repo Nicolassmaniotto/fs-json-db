@@ -1,4 +1,4 @@
-export function tryJson(data) {
+function tryJson(data) {
     try {
         if(typeof(data) == 'object') return data
         let result = JSON.parse(data);
@@ -8,7 +8,7 @@ export function tryJson(data) {
     }
 
 }
-export function tryString(data){
+function tryString(data){
     try{    
         if(typeof(data)=='number'){
             return `${data}`
@@ -21,7 +21,8 @@ export function tryString(data){
         return false
     }
 }
-export function forceString(data){
+
+function forceString(data){
     try{    
         if(typeof(data)=='number'){
             return `${data}`
@@ -38,3 +39,11 @@ export function forceString(data){
         return false
     }
 }
+
+
+
+
+// /*microteste
+/* */
+
+export {tryJson,tryString,forceString}
